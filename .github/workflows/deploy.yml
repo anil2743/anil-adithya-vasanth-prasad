@@ -53,6 +53,12 @@ jobs:
             # Copy to a known location with correct name
             cp "$WAR_FILE" ./app.war
             echo "WAR_FILE copied to ./app.war"
+            
+            # Verify the copied file has content
+            if [ ! -s "./app.war" ]; then
+              echo "ERROR: app.war is empty!"
+              exit 1
+            fi
           else
             echo "ERROR: No WAR files found in target directory"
             exit 1
@@ -90,12 +96,12 @@ jobs:
         run: |
           echo "=== Checking current directory ==="
           ls -la
-          echo "=== Checking if app.war exists ==="
-          if [ -f "./app.war" ]; then
-            echo "✓ app.war found"
+          echo "=== Checking if app.war exists and has content ==="
+          if [ -f "./app.war" ] && [ -s "./app.war" ]; then
+            echo "✓ app.war found with content"
             ls -la ./app.war
           else
-            echo "✗ app.war not found"
+            echo "✗ app.war not found or empty"
             exit 1
           fi
 
@@ -112,7 +118,7 @@ jobs:
           echo "=== Testing SSH connection ==="
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "echo 'SSH connection successful'"
 
-      # 5 Deploy to Staging using SSH
+      # 5 Deploy to Staging using direct SSH
       - name: Deploy to Staging
         uses: appleboy/ssh-action@master
         with:
@@ -130,46 +136,33 @@ jobs:
             echo "2. Setting permissions..."
             sudo chmod 777 /var/lib/tomcat10/webapps
             
-            # Create a temporary file to receive the WAR content
-            echo "3. Creating temporary file..."
-            touch /tmp/staging.war
-            sudo chmod 666 /tmp/staging.war
-            
-            # Transfer WAR file using base64 encoding
-            echo "4. Transferring WAR file..."
-            cat > /tmp/staging.war << 'WAR_EOF'
-            $(base64 -w 0 < ./app.war)
-            WAR_EOF
-            
-            # Decode the base64 content
-            echo "5. Decoding WAR file..."
-            base64 -d /tmp/staging.war > /tmp/staging_decoded.war
+            # Create a temporary file with direct content transfer
+            echo "3. Creating staging.war..."
+            cat > /tmp/staging.war << 'EOF'
+            $(cat ./app.war)
+            EOF
             
             # Move to webapps directory
-            echo "6. Moving WAR file to webapps..."
-            sudo mv /tmp/staging_decoded.war /var/lib/tomcat10/webapps/staging.war
+            echo "4. Moving WAR file to webapps..."
+            sudo mv /tmp/staging.war /var/lib/tomcat10/webapps/staging.war
             
-            # Verify the file was created
-            echo "7. Verifying WAR file..."
-            if [ -f "/var/lib/tomcat10/webapps/staging.war" ]; then
-              echo "✓ staging.war created successfully"
+            # Verify the file was created and has content
+            echo "5. Verifying WAR file..."
+            if [ -f "/var/lib/tomcat10/webapps/staging.war" ] && [ -s "/var/lib/tomcat10/webapps/staging.war" ]; then
+              echo "✓ staging.war created with content"
               ls -la /var/lib/tomcat10/webapps/staging.war
             else
-              echo "✗ staging.war not found after creation"
+              echo "✗ staging.war not found or empty"
               exit 1
             fi
             
             # Set permissions for WAR file
-            echo "8. Setting WAR file permissions..."
+            echo "6. Setting WAR file permissions..."
             sudo chown tomcat:tomcat /var/lib/tomcat10/webapps/staging.war
             sudo chmod 644 /var/lib/tomcat10/webapps/staging.war
             
-            # Clean up temporary files
-            echo "9. Cleaning up temporary files..."
-            rm -f /tmp/staging.war /tmp/staging_decoded.war
-            
             # Extract WAR file
-            echo "10. Extracting WAR file..."
+            echo "7. Extracting WAR file..."
             cd /var/lib/tomcat10/webapps
             sudo mkdir -p staging
             sudo chown tomcat:tomcat staging
@@ -179,8 +172,18 @@ jobs:
             sudo chown -R tomcat:tomcat .
             sudo chmod -R 755 .
             
+            # Check if staging directory has content
+            echo "8. Checking staging directory content..."
+            if [ "$(ls -A .)" ]; then
+              echo "✓ Staging directory has content"
+              ls -la
+            else
+              echo "✗ Staging directory is empty"
+              exit 1
+            fi
+            
             # Check for index.jsp
-            echo "11. Checking for index.jsp..."
+            echo "9. Checking for index.jsp..."
             if [ -f "index.jsp" ]; then
               echo "✓ index.jsp found"
             else
@@ -189,34 +192,26 @@ jobs:
               ls -la
             fi
             
-            # Check for web.xml
-            echo "12. Checking for web.xml..."
-            if [ -f "WEB-INF/web.xml" ]; then
-              echo "✓ web.xml found"
-            else
-              echo "⚠ web.xml not found in WEB-INF/"
-            fi
-            
             # Set permissions for all files
-            echo "13. Setting permissions..."
+            echo "10. Setting permissions..."
             sudo chown -R tomcat:tomcat /var/lib/tomcat10/webapps/staging
             sudo chmod -R 755 /var/lib/tomcat10/webapps/staging
             
             # Restart Tomcat
-            echo "14. Restarting Tomcat..."
+            echo "11. Restarting Tomcat..."
             sudo systemctl restart tomcat10
             
             # Wait for Tomcat to start
-            echo "15. Waiting for Tomcat to start..."
+            echo "12. Waiting for Tomcat to start..."
             sleep 30
             
             # Verify deployment
-            echo "16. Verifying deployment..."
+            echo "13. Verifying deployment..."
             ls -la /var/lib/tomcat10/webapps/
             ls -la /var/lib/tomcat10/webapps/staging/
             
             # Check Tomcat status
-            echo "17. Checking Tomcat status..."
+            echo "14. Checking Tomcat status..."
             sudo systemctl status tomcat10 --no-pager
             
             echo "=== Staging Deployment Completed ==="
@@ -240,12 +235,12 @@ jobs:
         run: |
           echo "=== Checking current directory ==="
           ls -la
-          echo "=== Checking if app.war exists ==="
-          if [ -f "./app.war" ]; then
-            echo "✓ app.war found"
+          echo "=== Checking if app.war exists and has content ==="
+          if [ -f "./app.war" ] && [ -s "./app.war" ]; then
+            echo "✓ app.war found with content"
             ls -la ./app.war
           else
-            echo "✗ app.war not found"
+            echo "✗ app.war not found or empty"
             exit 1
           fi
 
@@ -262,7 +257,7 @@ jobs:
           echo "=== Testing SSH connection ==="
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "echo 'SSH connection successful'"
 
-      # 5 Deploy to Production using SSH
+      # 5 Deploy to Production using direct SSH
       - name: Deploy to Production
         uses: appleboy/ssh-action@master
         with:
@@ -280,46 +275,33 @@ jobs:
             echo "2. Setting permissions..."
             sudo chmod 777 /var/lib/tomcat10/webapps
             
-            # Create a temporary file to receive the WAR content
-            echo "3. Creating temporary file..."
-            touch /tmp/ROOT.war
-            sudo chmod 666 /tmp/ROOT.war
-            
-            # Transfer WAR file using base64 encoding
-            echo "4. Transferring WAR file..."
-            cat > /tmp/ROOT.war << 'WAR_EOF'
-            $(base64 -w 0 < ./app.war)
-            WAR_EOF
-            
-            # Decode the base64 content
-            echo "5. Decoding WAR file..."
-            base64 -d /tmp/ROOT.war > /tmp/ROOT_decoded.war
+            # Create a temporary file with direct content transfer
+            echo "3. Creating ROOT.war..."
+            cat > /tmp/ROOT.war << 'EOF'
+            $(cat ./app.war)
+            EOF
             
             # Move to webapps directory
-            echo "6. Moving WAR file to webapps..."
-            sudo mv /tmp/ROOT_decoded.war /var/lib/tomcat10/webapps/ROOT.war
+            echo "4. Moving WAR file to webapps..."
+            sudo mv /tmp/ROOT.war /var/lib/tomcat10/webapps/ROOT.war
             
-            # Verify the file was created
-            echo "7. Verifying WAR file..."
-            if [ -f "/var/lib/tomcat10/webapps/ROOT.war" ]; then
-              echo "✓ ROOT.war created successfully"
+            # Verify the file was created and has content
+            echo "5. Verifying WAR file..."
+            if [ -f "/var/lib/tomcat10/webapps/ROOT.war" ] && [ -s "/var/lib/tomcat10/webapps/ROOT.war" ]; then
+              echo "✓ ROOT.war created with content"
               ls -la /var/lib/tomcat10/webapps/ROOT.war
             else
-              echo "✗ ROOT.war not found after creation"
+              echo "✗ ROOT.war not found or empty"
               exit 1
             fi
             
             # Set permissions for WAR file
-            echo "8. Setting WAR file permissions..."
+            echo "6. Setting WAR file permissions..."
             sudo chown tomcat:tomcat /var/lib/tomcat10/webapps/ROOT.war
             sudo chmod 644 /var/lib/tomcat10/webapps/ROOT.war
             
-            # Clean up temporary files
-            echo "9. Cleaning up temporary files..."
-            rm -f /tmp/ROOT.war /tmp/ROOT_decoded.war
-            
             # Extract WAR file
-            echo "10. Extracting WAR file..."
+            echo "7. Extracting WAR file..."
             cd /var/lib/tomcat10/webapps
             sudo mkdir -p ROOT
             sudo chown tomcat:tomcat ROOT
@@ -329,8 +311,18 @@ jobs:
             sudo chown -R tomcat:tomcat .
             sudo chmod -R 755 .
             
+            # Check if ROOT directory has content
+            echo "8. Checking ROOT directory content..."
+            if [ "$(ls -A .)" ]; then
+              echo "✓ ROOT directory has content"
+              ls -la
+            else
+              echo "✗ ROOT directory is empty"
+              exit 1
+            fi
+            
             # Check for index.jsp
-            echo "11. Checking for index.jsp..."
+            echo "9. Checking for index.jsp..."
             if [ -f "index.jsp" ]; then
               echo "✓ index.jsp found"
             else
@@ -339,34 +331,26 @@ jobs:
               ls -la
             fi
             
-            # Check for web.xml
-            echo "12. Checking for web.xml..."
-            if [ -f "WEB-INF/web.xml" ]; then
-              echo "✓ web.xml found"
-            else
-              echo "⚠ web.xml not found in WEB-INF/"
-            fi
-            
             # Set permissions for all files
-            echo "13. Setting permissions..."
+            echo "10. Setting permissions..."
             sudo chown -R tomcat:tomcat /var/lib/tomcat10/webapps/ROOT
             sudo chmod -R 755 /var/lib/tomcat10/webapps/ROOT
             
             # Restart Tomcat
-            echo "14. Restarting Tomcat..."
+            echo "11. Restarting Tomcat..."
             sudo systemctl restart tomcat10
             
             # Wait for Tomcat to start
-            echo "15. Waiting for Tomcat to start..."
+            echo "12. Waiting for Tomcat to start..."
             sleep 30
             
             # Verify deployment
-            echo "16. Verifying deployment..."
+            echo "13. Verifying deployment..."
             ls -la /var/lib/tomcat10/webapps/
             ls -la /var/lib/tomcat10/webapps/ROOT/
             
             # Check Tomcat status
-            echo "17. Checking Tomcat status..."
+            echo "14. Checking Tomcat status..."
             sudo systemctl status tomcat10 --no-pager
             
             echo "=== Production Deployment Completed ==="
