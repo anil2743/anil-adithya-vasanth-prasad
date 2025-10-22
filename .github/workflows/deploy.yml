@@ -105,13 +105,13 @@ jobs:
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      # 4 Test SSH connection and check directory
-      - name: Test SSH and check directory
+      # 4 Test SSH connection
+      - name: Test SSH connection
         run: |
           echo "=== Testing SSH connection ==="
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "echo 'SSH connection successful' && ls -la /var/lib/tomcat10/webapps/"
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "echo 'SSH connection successful'"
 
-      # 5 Deploy to Staging with detailed logging
+      # 5 Deploy to Staging using base64 encoding
       - name: Deploy to Staging
         uses: appleboy/ssh-action@master
         with:
@@ -129,38 +129,41 @@ jobs:
             echo "2. Setting permissions..."
             sudo chmod 777 /var/lib/tomcat10/webapps
             
-            # Upload WAR file as staging.war
-            echo "3. Uploading WAR file to staging..."
-            scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
-              ./app.war ubuntu@${{ secrets.EC2_HOST }}:/var/lib/tomcat10/webapps/staging.war
+            # Create WAR file from base64
+            echo "3. Creating WAR file from base64..."
+            cat > /tmp/staging.war << 'EOF'
+            ${{ base64_encode('app.war') }}
+            EOF
             
-            # Verify the file was uploaded
-            echo "4. Verifying upload..."
-            ls -la /var/lib/tomcat10/webapps/
+            # Move to webapps directory
+            echo "4. Moving WAR file to webapps..."
+            sudo mv /tmp/staging.war /var/lib/tomcat10/webapps/staging.war
             
+            # Verify the file was created
+            echo "5. Verifying WAR file..."
             if [ -f "/var/lib/tomcat10/webapps/staging.war" ]; then
-              echo "✓ staging.war uploaded successfully"
+              echo "✓ staging.war created successfully"
               ls -la /var/lib/tomcat10/webapps/staging.war
             else
-              echo "✗ staging.war not found after upload"
+              echo "✗ staging.war not found after creation"
               exit 1
             fi
             
             # Set permissions for WAR file
-            echo "5. Setting WAR file permissions..."
+            echo "6. Setting WAR file permissions..."
             sudo chown tomcat:tomcat /var/lib/tomcat10/webapps/staging.war
             sudo chmod 644 /var/lib/tomcat10/webapps/staging.war
             
             # Restart Tomcat
-            echo "6. Restarting Tomcat..."
+            echo "7. Restarting Tomcat..."
             sudo systemctl restart tomcat10
             
             # Wait for Tomcat to start and deploy
-            echo "7. Waiting for Tomcat to start and deploy..."
+            echo "8. Waiting for Tomcat to start and deploy..."
             sleep 30
             
             # Verify deployment
-            echo "8. Verifying deployment..."
+            echo "9. Verifying deployment..."
             ls -la /var/lib/tomcat10/webapps/
             
             # Check if staging directory was created by Tomcat
@@ -172,7 +175,7 @@ jobs:
             fi
             
             # Check Tomcat status
-            echo "9. Checking Tomcat status..."
+            echo "10. Checking Tomcat status..."
             sudo systemctl status tomcat10 --no-pager
             
             echo "=== Staging Deployment Completed ==="
@@ -211,13 +214,13 @@ jobs:
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      # 4 Test SSH connection and check directory
-      - name: Test SSH and check directory
+      # 4 Test SSH connection
+      - name: Test SSH connection
         run: |
           echo "=== Testing SSH connection ==="
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "echo 'SSH connection successful' && ls -la /var/lib/tomcat10/webapps/"
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "echo 'SSH connection successful'"
 
-      # 5 Deploy to Production with detailed logging
+      # 5 Deploy to Production using base64 encoding
       - name: Deploy to Production
         uses: appleboy/ssh-action@master
         with:
@@ -235,38 +238,41 @@ jobs:
             echo "2. Setting permissions..."
             sudo chmod 777 /var/lib/tomcat10/webapps
             
-            # Upload WAR file as ROOT.war
-            echo "3. Uploading WAR file to production..."
-            scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
-              ./app.war ubuntu@${{ secrets.EC2_HOST }}:/var/lib/tomcat10/webapps/ROOT.war
+            # Create WAR file from base64
+            echo "3. Creating WAR file from base64..."
+            cat > /tmp/ROOT.war << 'EOF'
+            ${{ base64_encode('app.war') }}
+            EOF
             
-            # Verify the file was uploaded
-            echo "4. Verifying upload..."
-            ls -la /var/lib/tomcat10/webapps/
+            # Move to webapps directory
+            echo "4. Moving WAR file to webapps..."
+            sudo mv /tmp/ROOT.war /var/lib/tomcat10/webapps/ROOT.war
             
+            # Verify the file was created
+            echo "5. Verifying WAR file..."
             if [ -f "/var/lib/tomcat10/webapps/ROOT.war" ]; then
-              echo "✓ ROOT.war uploaded successfully"
+              echo "✓ ROOT.war created successfully"
               ls -la /var/lib/tomcat10/webapps/ROOT.war
             else
-              echo "✗ ROOT.war not found after upload"
+              echo "✗ ROOT.war not found after creation"
               exit 1
             fi
             
             # Set permissions for WAR file
-            echo "5. Setting WAR file permissions..."
+            echo "6. Setting WAR file permissions..."
             sudo chown tomcat:tomcat /var/lib/tomcat10/webapps/ROOT.war
             sudo chmod 644 /var/lib/tomcat10/webapps/ROOT.war
             
             # Restart Tomcat
-            echo "6. Restarting Tomcat..."
+            echo "7. Restarting Tomcat..."
             sudo systemctl restart tomcat10
             
             # Wait for Tomcat to start and deploy
-            echo "7. Waiting for Tomcat to start and deploy..."
+            echo "8. Waiting for Tomcat to start and deploy..."
             sleep 30
             
             # Verify deployment
-            echo "8. Verifying deployment..."
+            echo "9. Verifying deployment..."
             ls -la /var/lib/tomcat10/webapps/
             
             # Check if ROOT directory was created by Tomcat
@@ -278,7 +284,7 @@ jobs:
             fi
             
             # Check Tomcat status
-            echo "9. Checking Tomcat status..."
+            echo "10. Checking Tomcat status..."
             sudo systemctl status tomcat10 --no-pager
             
             echo "=== Production Deployment Completed ==="
