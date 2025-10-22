@@ -106,7 +106,7 @@ jobs:
           script: |
             echo "=== Starting Staging Deployment ==="
             
-            # Clean up staging artifacts
+            # Clean up any existing staging artifacts
             echo "1. Cleaning up staging artifacts..."
             sudo rm -rf /var/lib/tomcat10/webapps/staging*
             
@@ -128,20 +128,20 @@ jobs:
             echo "5. Restarting Tomcat..."
             sudo systemctl restart tomcat10
             
-            # Wait for Tomcat to start
-            echo "6. Waiting for Tomcat to start..."
+            # Wait for Tomcat to start and deploy
+            echo "6. Waiting for Tomcat to start and deploy..."
             sleep 30
             
             # Verify deployment
             echo "7. Verifying deployment..."
             ls -la /var/lib/tomcat10/webapps/
             
-            # Check if staging directory was created
+            # Check if staging directory was created by Tomcat
             if [ -d "/var/lib/tomcat10/webapps/staging" ]; then
-              echo "Staging directory created successfully"
+              echo "✓ Staging directory created by Tomcat"
               ls -la /var/lib/tomcat10/webapps/staging/
             else
-              echo "WARNING: Staging directory not found"
+              echo "✗ Staging directory not found"
             fi
             
             # Check Tomcat status
@@ -185,7 +185,7 @@ jobs:
           script: |
             echo "=== Starting Production Deployment ==="
             
-            # Clean up production artifacts
+            # Clean up any existing production artifacts
             echo "1. Cleaning up production artifacts..."
             sudo rm -rf /var/lib/tomcat10/webapps/ROOT*
             
@@ -207,20 +207,20 @@ jobs:
             echo "5. Restarting Tomcat..."
             sudo systemctl restart tomcat10
             
-            # Wait for Tomcat to start
-            echo "6. Waiting for Tomcat to start..."
+            # Wait for Tomcat to start and deploy
+            echo "6. Waiting for Tomcat to start and deploy..."
             sleep 30
             
             # Verify deployment
             echo "7. Verifying deployment..."
             ls -la /var/lib/tomcat10/webapps/
             
-            # Check if ROOT directory was created
+            # Check if ROOT directory was created by Tomcat
             if [ -d "/var/lib/tomcat10/webapps/ROOT" ]; then
-              echo "ROOT directory created successfully"
+              echo "✓ ROOT directory created by Tomcat"
               ls -la /var/lib/tomcat10/webapps/ROOT/
             else
-              echo "WARNING: ROOT directory not found"
+              echo "✗ ROOT directory not found"
             fi
             
             # Check Tomcat status
