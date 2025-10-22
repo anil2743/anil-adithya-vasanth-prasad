@@ -118,8 +118,19 @@ jobs:
           echo "=== Testing SSH connection ==="
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "echo 'SSH connection successful'"
 
-      # 5 Deploy to Staging using direct SSH
+      # 5 Deploy to Staging using rsync
       - name: Deploy to Staging
+        uses: burnett01/rsync-deployments@5.2.1
+        with:
+          switches: -avz
+          path: ./app.war
+          remote_path: /var/lib/tomcat10/webapps/staging.war
+          remote_host: ${{ secrets.EC2_HOST }}
+          remote_user: ${{ secrets.EC2_USER }}
+          remote_key: ${{ secrets.EC2_SSH_KEY }}
+
+      # 6 Configure and Restart Tomcat
+      - name: Configure and Restart Tomcat
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -128,26 +139,8 @@ jobs:
           script: |
             echo "=== Starting Staging Deployment ==="
             
-            # Clean up any existing staging artifacts
-            echo "1. Cleaning up staging artifacts..."
-            sudo rm -rf /var/lib/tomcat10/webapps/staging*
-            
-            # Set permissions for webapps directory
-            echo "2. Setting permissions..."
-            sudo chmod 777 /var/lib/tomcat10/webapps
-            
-            # Create a temporary file with direct content transfer
-            echo "3. Creating staging.war..."
-            cat > /tmp/staging.war << 'EOF'
-            $(cat ./app.war)
-            EOF
-            
-            # Move to webapps directory
-            echo "4. Moving WAR file to webapps..."
-            sudo mv /tmp/staging.war /var/lib/tomcat10/webapps/staging.war
-            
             # Verify the file was created and has content
-            echo "5. Verifying WAR file..."
+            echo "1. Verifying WAR file..."
             if [ -f "/var/lib/tomcat10/webapps/staging.war" ] && [ -s "/var/lib/tomcat10/webapps/staging.war" ]; then
               echo "✓ staging.war created with content"
               ls -la /var/lib/tomcat10/webapps/staging.war
@@ -157,12 +150,16 @@ jobs:
             fi
             
             # Set permissions for WAR file
-            echo "6. Setting WAR file permissions..."
+            echo "2. Setting WAR file permissions..."
             sudo chown tomcat:tomcat /var/lib/tomcat10/webapps/staging.war
             sudo chmod 644 /var/lib/tomcat10/webapps/staging.war
             
+            # Clean up any existing staging directory
+            echo "3. Cleaning up existing staging directory..."
+            sudo rm -rf /var/lib/tomcat10/webapps/staging
+            
             # Extract WAR file
-            echo "7. Extracting WAR file..."
+            echo "4. Extracting WAR file..."
             cd /var/lib/tomcat10/webapps
             sudo mkdir -p staging
             sudo chown tomcat:tomcat staging
@@ -173,7 +170,7 @@ jobs:
             sudo chmod -R 755 .
             
             # Check if staging directory has content
-            echo "8. Checking staging directory content..."
+            echo "5. Checking staging directory content..."
             if [ "$(ls -A .)" ]; then
               echo "✓ Staging directory has content"
               ls -la
@@ -183,7 +180,7 @@ jobs:
             fi
             
             # Check for index.jsp
-            echo "9. Checking for index.jsp..."
+            echo "6. Checking for index.jsp..."
             if [ -f "index.jsp" ]; then
               echo "✓ index.jsp found"
             else
@@ -193,25 +190,25 @@ jobs:
             fi
             
             # Set permissions for all files
-            echo "10. Setting permissions..."
+            echo "7. Setting permissions..."
             sudo chown -R tomcat:tomcat /var/lib/tomcat10/webapps/staging
             sudo chmod -R 755 /var/lib/tomcat10/webapps/staging
             
             # Restart Tomcat
-            echo "11. Restarting Tomcat..."
+            echo "8. Restarting Tomcat..."
             sudo systemctl restart tomcat10
             
             # Wait for Tomcat to start
-            echo "12. Waiting for Tomcat to start..."
+            echo "9. Waiting for Tomcat to start..."
             sleep 30
             
             # Verify deployment
-            echo "13. Verifying deployment..."
+            echo "10. Verifying deployment..."
             ls -la /var/lib/tomcat10/webapps/
             ls -la /var/lib/tomcat10/webapps/staging/
             
             # Check Tomcat status
-            echo "14. Checking Tomcat status..."
+            echo "11. Checking Tomcat status..."
             sudo systemctl status tomcat10 --no-pager
             
             echo "=== Staging Deployment Completed ==="
@@ -257,8 +254,19 @@ jobs:
           echo "=== Testing SSH connection ==="
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "echo 'SSH connection successful'"
 
-      # 5 Deploy to Production using direct SSH
+      # 5 Deploy to Production using rsync
       - name: Deploy to Production
+        uses: burnett01/rsync-deployments@5.2.1
+        with:
+          switches: -avz
+          path: ./app.war
+          remote_path: /var/lib/tomcat10/webapps/ROOT.war
+          remote_host: ${{ secrets.EC2_HOST }}
+          remote_user: ${{ secrets.EC2_USER }}
+          remote_key: ${{ secrets.EC2_SSH_KEY }}
+
+      # 6 Configure and Restart Tomcat
+      - name: Configure and Restart Tomcat
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -267,26 +275,8 @@ jobs:
           script: |
             echo "=== Starting Production Deployment ==="
             
-            # Clean up any existing production artifacts
-            echo "1. Cleaning up production artifacts..."
-            sudo rm -rf /var/lib/tomcat10/webapps/ROOT*
-            
-            # Set permissions for webapps directory
-            echo "2. Setting permissions..."
-            sudo chmod 777 /var/lib/tomcat10/webapps
-            
-            # Create a temporary file with direct content transfer
-            echo "3. Creating ROOT.war..."
-            cat > /tmp/ROOT.war << 'EOF'
-            $(cat ./app.war)
-            EOF
-            
-            # Move to webapps directory
-            echo "4. Moving WAR file to webapps..."
-            sudo mv /tmp/ROOT.war /var/lib/tomcat10/webapps/ROOT.war
-            
             # Verify the file was created and has content
-            echo "5. Verifying WAR file..."
+            echo "1. Verifying WAR file..."
             if [ -f "/var/lib/tomcat10/webapps/ROOT.war" ] && [ -s "/var/lib/tomcat10/webapps/ROOT.war" ]; then
               echo "✓ ROOT.war created with content"
               ls -la /var/lib/tomcat10/webapps/ROOT.war
@@ -296,12 +286,16 @@ jobs:
             fi
             
             # Set permissions for WAR file
-            echo "6. Setting WAR file permissions..."
+            echo "2. Setting WAR file permissions..."
             sudo chown tomcat:tomcat /var/lib/tomcat10/webapps/ROOT.war
             sudo chmod 644 /var/lib/tomcat10/webapps/ROOT.war
             
+            # Clean up any existing ROOT directory
+            echo "3. Cleaning up existing ROOT directory..."
+            sudo rm -rf /var/lib/tomcat10/webapps/ROOT
+            
             # Extract WAR file
-            echo "7. Extracting WAR file..."
+            echo "4. Extracting WAR file..."
             cd /var/lib/tomcat10/webapps
             sudo mkdir -p ROOT
             sudo chown tomcat:tomcat ROOT
@@ -312,7 +306,7 @@ jobs:
             sudo chmod -R 755 .
             
             # Check if ROOT directory has content
-            echo "8. Checking ROOT directory content..."
+            echo "5. Checking ROOT directory content..."
             if [ "$(ls -A .)" ]; then
               echo "✓ ROOT directory has content"
               ls -la
@@ -322,7 +316,7 @@ jobs:
             fi
             
             # Check for index.jsp
-            echo "9. Checking for index.jsp..."
+            echo "6. Checking for index.jsp..."
             if [ -f "index.jsp" ]; then
               echo "✓ index.jsp found"
             else
@@ -332,25 +326,25 @@ jobs:
             fi
             
             # Set permissions for all files
-            echo "10. Setting permissions..."
+            echo "7. Setting permissions..."
             sudo chown -R tomcat:tomcat /var/lib/tomcat10/webapps/ROOT
             sudo chmod -R 755 /var/lib/tomcat10/webapps/ROOT
             
             # Restart Tomcat
-            echo "11. Restarting Tomcat..."
+            echo "8. Restarting Tomcat..."
             sudo systemctl restart tomcat10
             
             # Wait for Tomcat to start
-            echo "12. Waiting for Tomcat to start..."
+            echo "9. Waiting for Tomcat to start..."
             sleep 30
             
             # Verify deployment
-            echo "13. Verifying deployment..."
+            echo "10. Verifying deployment..."
             ls -la /var/lib/tomcat10/webapps/
             ls -la /var/lib/tomcat10/webapps/ROOT/
             
             # Check Tomcat status
-            echo "14. Checking Tomcat status..."
+            echo "11. Checking Tomcat status..."
             sudo systemctl status tomcat10 --no-pager
             
             echo "=== Production Deployment Completed ==="
