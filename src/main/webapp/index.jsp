@@ -1372,7 +1372,7 @@
             });
         }
 
-        // Navbar scroll effect
+        // Navbar scroll effect facing
         function initNavbarScroll() {
             const navbar = document.getElementById('navbar');
             
