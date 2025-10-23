@@ -1,16 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%
-    // Add cache control headers
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    response.setHeader("Pragma", "no-cache");
-    response.setDateHeader("Expires", 0);
-%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Student Management System</title>
+    <title>NeuralForge AI - Advanced AI/ML Solutions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -18,187 +13,248 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow-x: hidden;
-            position: relative;
+        :root {
+            --primary-color: #4a00e0;
+            --secondary-color: #8e2de2;
+            --accent-color: #00d4ff;
+            --dark-bg: #0a0a0a;
+            --light-text: #ffffff;
+            --dark-text: #333333;
         }
 
-        /* Animated background particles */
-        .particles {
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
             position: fixed;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
+            top: 0;
+            left: 0;
             z-index: -1;
+            background: linear-gradient(45deg, #0a0a0a, #1a1a2e);
+            overflow: hidden;
         }
 
         .particle {
             position: absolute;
-            display: block;
-            pointer-events: none;
-            opacity: 0.3;
-        }
-
-        .particle::before {
-            content: '✦';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            font-size: 20px;
-            color: white;
-        }
-
-        @keyframes float-up {
-            to {
-                transform: translateY(-100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        .container {
-            max-width: 800px;
-            width: 90%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            position: relative;
-            animation: fadeInUp 1s ease-out;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px) rotateX(10deg);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) rotateX(0);
-            }
-        }
-
-        /* Animated background pattern */
-        .bg-pattern {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 20%);
-            z-index: -1;
-            animation: pattern-move 20s linear infinite;
-        }
-
-        @keyframes pattern-move {
-            0% {
-                transform: translate(0, 0);
-            }
-            100% {
-                transform: translate(50px, 50px);
-            }
-        }
-
-        .header {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            padding: 60px 40px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Animated header elements */
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
-            opacity: 0.3;
-        }
-
-        .floating-symbols {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .floating-symbol {
-            position: absolute;
-            font-size: 20px;
-            opacity: 0.2;
+            width: 3px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            opacity: 0.5;
             animation: float 15s infinite linear;
         }
 
         @keyframes float {
             0% {
-                transform: translateY(100vh) rotate(0deg);
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
             }
             100% {
-                transform: translateY(-100px) rotate(360deg);
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
             }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background-color: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 50px;
         }
 
         .logo {
-            font-size: 3rem;
+            font-size: 24px;
             font-weight: bold;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-size: 16px;
             position: relative;
-            z-index: 2;
-            animation: pulse 2s infinite;
+            transition: all 0.3s ease;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: width 0.3s ease;
         }
 
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            margin-bottom: 20px;
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             position: relative;
-            z-index: 2;
+            overflow: hidden;
         }
 
-        .main-content {
-            padding: 60px 40px;
+        .hero-content {
             text-align: center;
-            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 20px;
         }
 
-        .welcome-title {
-            font-size: 2.5rem;
-            color: #2c3e50;
+        .hero h1 {
+            font-size: 4rem;
             margin-bottom: 20px;
-            animation: slideIn 1s ease-out 0.5s both;
-            position: relative;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient 3s ease infinite;
+            background-size: 200% 200%;
         }
 
-        .welcome-title::after {
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            z-index: -1;
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .cta-button:hover::before {
+            opacity: 1;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(142, 45, 226, 0.3);
+        }
+
+        /* Interactive Neural Network */
+        .neural-network {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        .node {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+
+        .connection {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            transform-origin: left center;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 100px 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .section-title::after {
             content: '';
             position: absolute;
             bottom: -10px;
@@ -206,341 +262,541 @@
             transform: translateX(-50%);
             width: 100px;
             height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            border-radius: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .description {
-            font-size: 1.1rem;
-            color: #666;
-            margin-bottom: 40px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .cta-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 15px 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-            z-index: -1;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
-        }
-
-        .secondary-btn {
-            background: transparent;
-            color: #667eea;
-            border: 2px solid #667eea;
-            padding: 13px 38px;
-        }
-
-        .secondary-btn:hover {
-            background: #667eea;
-            color: white;
-            transform: translateY(-3px);
-        }
-
-        .features {
+        .service-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
-            margin-top: 60px;
-            padding: 0 20px;
         }
 
-        .feature-card {
-            background: white;
-            padding: 30px;
+        .service-card {
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-            text-align: center;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
-            border-top: 4px solid #667eea;
             position: relative;
             overflow: hidden;
         }
 
-        .feature-card::before {
+        .service-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(74, 0, 224, 0.1), rgba(0, 212, 255, 0.1));
             opacity: 0;
             transition: opacity 0.3s ease;
-            z-index: -1;
         }
 
-        .feature-card:hover::before {
+        .service-card:hover::before {
             opacity: 1;
         }
 
-        .feature-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(74, 0, 224, 0.2);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .service-description {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 50px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .feature-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: scale(1.05);
         }
 
         .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
+            width: 80px;
+            height: 80px;
             margin: 0 auto 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            color: white;
-            animation: pulse 2s infinite;
-            position: relative;
+            font-size: 2rem;
+            box-shadow: 0 10px 20px rgba(74, 0, 224, 0.2);
+            transition: all 0.3s ease;
         }
 
-        .feature-icon::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            animation: ripple 2s infinite;
-        }
-
-        @keyframes ripple {
-            0% {
-                transform: scale(1);
-                opacity: 0.5;
-            }
-            100% {
-                transform: scale(1.5);
-                opacity: 0;
-            }
+        .feature-item:hover .feature-icon {
+            box-shadow: 0 15px 30px rgba(74, 0, 224, 0.4);
+            transform: rotate(5deg);
         }
 
         .feature-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             margin-bottom: 10px;
-            color: #2c3e50;
         }
 
-        .feature-desc {
-            color: #666;
-            font-size: 0.95rem;
-        }
-
-        .footer {
-            background: #2c3e50;
-            color: white;
+        /* Contact Section */
+        .contact {
+            padding: 100px 50px;
+            max-width: 800px;
+            margin: 0 auto;
             text-align: center;
-            padding: 20px;
-            font-size: 0.9rem;
-            position: relative;
-            overflow: hidden;
         }
 
-        .footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+        .contact-form {
+            margin-top: 50px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .form-control {
             width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="footer-pattern" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23footer-pattern)"/></svg>') repeat;
-            opacity: 0.1;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
         }
 
-        .decorative-shape {
-            position: absolute;
-            border-radius: 50%;
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+
+        .submit-btn {
+            padding: 15px 30px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(142, 45, 226, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            padding: 30px 50px;
+            background: rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .social-links {
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
             background: rgba(255, 255, 255, 0.1);
-            animation: float-shape 20s infinite linear;
+            border-radius: 50%;
+            margin: 0 10px;
+            color: white;
+            transition: all 0.3s ease;
         }
 
-        @keyframes float-shape {
-            0% {
-                transform: translate(0, 0) rotate(0deg);
-            }
-            100% {
-                transform: translate(30px, -30px) rotate(360deg);
-            }
+        .social-links a:hover {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            transform: translateY(-3px);
         }
 
+        /* Mouse Follower */
+        .mouse-follower {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(0, 212, 255, 0.5);
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            mix-blend-mode: difference;
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .header {
-                padding: 40px 20px;
-            }
-
-            .logo {
+            .hero h1 {
                 font-size: 2.5rem;
             }
-
-            .main-content {
-                padding: 40px 20px;
+            
+            .hero p {
+                font-size: 1.2rem;
             }
-
-            .welcome-title {
-                font-size: 2rem;
+            
+            nav {
+                padding: 15px 20px;
             }
-
-            .features {
-                grid-template-columns: 1fr;
-                gap: 20px;
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .services, .features, .contact {
+                padding: 50px 20px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Animated background particles -->
-    <div class="particles" id="particles"></div>
+    <!-- Animated Background -->
+    <div class="bg-animation" id="bgAnimation"></div>
 
-    <div class="container">
-        <div class="bg-pattern"></div>
-        
-        <header class="header">
-            <!-- Floating symbols in header -->
-            <div class="floating-symbols">
-                <span class="floating-symbol" style="left: 10%; animation-delay: 0s;">✦</span>
-                <span class="floating-symbol" style="left: 20%; animation-delay: 2s;">✧</span>
-                <span class="floating-symbol" style="left: 30%; animation-delay: 4s;">✦</span>
-                <span class="floating-symbol" style="left: 40%; animation-delay: 6s;">✧</span>
-                <span class="floating-symbol" style="left: 50%; animation-delay: 8s;">✦</span>
-                <span class="floating-symbol" style="left: 60%; animation-delay: 10s;">✧</span>
-                <span class="floating-symbol" style="left: 70%; animation-delay: 12s;">✦</span>
-                <span class="floating-symbol" style="left: 80%; animation-delay: 14s;">✧</span>
-                <span class="floating-symbol" style="left: 90%; animation-delay: 16s;">✦</span>
+    <!-- Mouse Follower -->
+    <div class="mouse-follower" id="mouseFollower"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <a href="#" class="logo">NeuralForge AI</a>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="neural-network" id="neuralNetwork"></div>
+        <div class="hero-content">
+            <h1>Transform Your Business with AI</h1>
+            <p>Unlock the power of machine learning and artificial intelligence to drive innovation and growth</p>
+            <a href="#services" class="cta-button">Explore Our Solutions</a>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <h2 class="section-title">Our AI/ML Services</h2>
+        <div class="service-cards">
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-brain"></i></div>
+                <h3 class="service-title">Deep Learning Solutions</h3>
+                <p class="service-description">Custom neural networks designed to solve complex business problems with unprecedented accuracy and efficiency.</p>
             </div>
-            
-            <div class="logo">📚 SMS</div>
-            <p class="subtitle">Empowering Education Through Innovation</p>
-        </header>
-
-        <main class="main-content">
-            <h1 class="welcome-title">Welcome to Student Management System</h1>
-            <p class="description">
-                Streamline your student data, track progress, and enhance administrative efficiency with our intuitive platform designed for educators and administrators.
-            </p>
-
-            <div class="cta-section">
-                <a href="StudentServlet?action=list" class="btn">Manage Students</a>
-                <a href="#" class="btn secondary-btn">Learn More</a>
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-chart-line"></i></div>
+                <h3 class="service-title">Predictive Analytics</h3>
+                <p class="service-description">Leverage historical data to forecast trends, identify opportunities, and make data-driven decisions with confidence.</p>
             </div>
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-robot"></i></div>
+                <h3 class="service-title">Automation Systems</h3>
+                <p class="service-description">Streamline operations with intelligent automation that learns and adapts to your business processes.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-language"></i></div>
+                <h3 class="service-title">Natural Language Processing</h3>
+                <p class="service-description">Extract insights from text data, enable human-computer interaction, and automate language-based tasks.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-eye"></i></div>
+                <h3 class="service-title">Computer Vision</h3>
+                <p class="service-description">Transform visual data into actionable insights with advanced image recognition and analysis systems.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon"><i class="fas fa-cogs"></i></div>
+                <h3 class="service-title">AI Integration</h3>
+                <p class="service-description">Seamlessly incorporate AI capabilities into your existing systems and workflows for maximum impact.</p>
+            </div>
+        </div>
+    </section>
 
-            <section class="features">
-                <div class="feature-card">
-                    <div class="feature-icon">👥</div>
-                    <h3 class="feature-title">Student Profiles</h3>
-                    <p class="feature-desc">Comprehensive profiles with grades, attendance, and personal info at your fingertips.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3 class="feature-title">Analytics Dashboard</h3>
-                    <p class="feature-desc">Visual insights into performance trends and reports to drive informed decisions.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3 class="feature-title">Secure Access</h3>
-                    <p class="feature-desc">Role-based permissions ensure data privacy and controlled access for all users.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📝</div>
-                    <h3 class="feature-title">Attendance Tracking</h3>
-                    <p class="feature-desc">Automated attendance logging and real-time notifications to monitor student participation effortlessly.</p>
-                </div>
-            </section>
-        </main>
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2 class="section-title">Why Choose NeuralForge AI</h2>
+        <div class="feature-container">
+            <div class="feature-item">
+                <div class="feature-icon"><i class="fas fa-rocket"></i></div>
+                <h3 class="feature-title">Rapid Implementation</h3>
+                <p>From concept to deployment in weeks, not months</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3 class="feature-title">Enterprise Security</h3>
+                <p>Bank-level encryption and data protection</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
+                <h3 class="feature-title">Measurable ROI</h3>
+                <p>Track performance and demonstrate value</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon"><i class="fas fa-users"></i></div>
+                <h3 class="feature-title">Expert Support</h3>
+                <p>24/7 assistance from AI specialists</p>
+            </div>
+        </div>
+    </section>
 
-        <footer class="footer">
-            <!-- Decorative shapes in footer -->
-            <div class="decorative-shape" style="width: 50px; height: 50px; top: 10px; left: 10%;"></div>
-            <div class="decorative-shape" style="width: 30px; height: 30px; top: 20px; right: 15%;"></div>
-            <div class="decorative-shape" style="width: 40px; height: 40px; bottom: 10px; left: 30%;"></div>
-            
-            <p>&copy; 2025 Student Management System. All rights reserved.</p>
-        </footer>
-    </div>
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <h2 class="section-title">Start Your AI Journey</h2>
+        <p>Ready to transform your business with AI? Get in touch with our experts today.</p>
+        <form class="contact-form" action="#" method="post">
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="company">Company</label>
+                <input type="text" id="company" name="company" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="message">Tell us about your project</label>
+                <textarea id="message" name="message" rows="5" class="form-control" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2023 NeuralForge AI. All rights reserved.</p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+    </footer>
 
     <script>
         // Create animated particles
-        document.addEventListener('DOMContentLoaded', function() {
-            const particlesContainer = document.getElementById('particles');
+        function createParticles() {
+            const bgAnimation = document.getElementById('bgAnimation');
             const particleCount = 50;
             
             for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('span');
+                const particle = document.createElement('div');
                 particle.classList.add('particle');
-                
-                // Random position
-                const posX = Math.random() * 100;
-                const posY = Math.random() * 100;
-                
-                // Random size
-                const size = Math.random() * 10 + 5;
-                
-                // Random animation duration
-                const duration = Math.random() * 20 + 10;
-                
-                // Random delay
-                const delay = Math.random() * 5;
-                
-                particle.style.left = `${posX}%`;
-                particle.style.top = `${posY}%`;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.animationDuration = `${duration}s`;
-                particle.style.animationDelay = `${delay}s`;
-                particle.style.animation = `float-up ${duration}s linear infinite`;
-                
-                particlesContainer.appendChild(particle);
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                bgAnimation.appendChild(particle);
             }
+        }
+
+        // Create interactive neural network
+        function createNeuralNetwork() {
+            const neuralNetwork = document.getElementById('neuralNetwork');
+            const nodeCount = 15;
+            const nodes = [];
+            
+            // Create nodes
+            for (let i = 0; i < nodeCount; i++) {
+                const node = document.createElement('div');
+                node.classList.add('node');
+                
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                
+                node.style.left = x + '%';
+                node.style.top = y + '%';
+                
+                neuralNetwork.appendChild(node);
+                nodes.push({ element: node, x, y });
+            }
+            
+            // Create connections
+            for (let i = 0; i < nodeCount; i++) {
+                for (let j = i + 1; j < nodeCount; j++) {
+                    if (Math.random() > 0.7) {
+                        const connection = document.createElement('div');
+                        connection.classList.add('connection');
+                        
+                        const x1 = nodes[i].x;
+                        const y1 = nodes[i].y;
+                        const x2 = nodes[j].x;
+                        const y2 = nodes[j].y;
+                        
+                        const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                        const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+                        
+                        connection.style.width = length + '%';
+                        connection.style.left = x1 + '%';
+                        connection.style.top = y1 + '%';
+                        connection.style.transform = `rotate(${angle}deg)`;
+                        
+                        neuralNetwork.appendChild(connection);
+                    }
+                }
+            }
+            
+            // Animate nodes on mouse move
+            document.addEventListener('mousemove', (e) => {
+                const mouseX = e.clientX / window.innerWidth;
+                const mouseY = e.clientY / window.innerHeight;
+                
+                nodes.forEach(node => {
+                    const distance = Math.sqrt(
+                        Math.pow(mouseX - node.x / 100, 2) + 
+                        Math.pow(mouseY - node.y / 100, 2)
+                    );
+                    
+                    if (distance < 0.2) {
+                        const moveX = (node.x / 100 - mouseX) * 10;
+                        const moveY = (node.y / 100 - mouseY) * 10;
+                        
+                        node.element.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                    } else {
+                        node.element.style.transform = 'translate(0, 0)';
+                    }
+                });
+            });
+        }
+
+        // Mouse follower effect
+        function initMouseFollower() {
+            const mouseFollower = document.getElementById('mouseFollower');
+            
+            document.addEventListener('mousemove', (e) => {
+                mouseFollower.style.left = e.clientX - 10 + 'px';
+                mouseFollower.style.top = e.clientY - 10 + 'px';
+            });
+            
+            // Scale effect on clickable elements
+            const clickableElements = document.querySelectorAll('a, button, .service-card, .feature-item');
+            
+            clickableElements.forEach(element => {
+                element.addEventListener('mouseenter', () => {
+                    mouseFollower.style.transform = 'scale(2)';
+                    mouseFollower.style.background = 'rgba(142, 45, 226, 0.5)';
+                });
+                
+                element.addEventListener('mouseleave', () => {
+                    mouseFollower.style.transform = 'scale(1)';
+                    mouseFollower.style.background = 'rgba(0, 212, 255, 0.5)';
+                });
+            });
+        }
+
+        // Navbar scroll effect
+        function initNavbarScroll() {
+            const navbar = document.getElementById('navbar');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        }
+
+        // Smooth scrolling for anchor links
+        function initSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 70,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Form submission handling
+        function initFormHandling() {
+            const form = document.querySelector('.contact-form');
+            
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Create a success message
+                const successMessage = document.createElement('div');
+                successMessage.style.padding = '20px';
+                successMessage.style.marginTop = '20px';
+                successMessage.style.background = 'rgba(0, 212, 255, 0.2)';
+                successMessage.style.borderRadius = '5px';
+                successMessage.style.border = '1px solid rgba(0, 212, 255, 0.5)';
+                successMessage.textContent = 'Thank you for your message! Our team will get back to you soon.';
+                
+                form.appendChild(successMessage);
+                form.reset();
+                
+                // Remove the message after 5 seconds
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 5000);
+            });
+        }
+
+        // Initialize all functions when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            createNeuralNetwork();
+            initMouseFollower();
+            initNavbarScroll();
+            initSmoothScrolling();
+            initFormHandling();
         });
     </script>
 </body>
