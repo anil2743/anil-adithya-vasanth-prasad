@@ -1,10 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuralForge AI - Advanced AI/ML Solutions</title>
+    <title>NeuralFlow - AI & ML Solutions</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,161 +13,139 @@
         }
 
         :root {
-            --primary-color: #4a00e0;
-            --secondary-color: #8e2de2;
-            --accent-color: #00d4ff;
-            --dark-bg: #0a0a0a;
-            --light-text: #ffffff;
-            --dark-text: #333333;
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --dark: #1a202c;
+            --light: #f7fafc;
+            --text: #2d3748;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-alt: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--light-text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
             overflow-x: hidden;
-            cursor: none;
-        }
-
-        /* Custom Cursor */
-        .custom-cursor {
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: rgba(0, 212, 255, 0.5);
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s ease;
-            mix-blend-mode: difference;
-        }
-
-        .cursor-trail {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            pointer-events: none;
-            z-index: 9998;
-            transition: transform 0.3s ease;
+            background: var(--light);
         }
 
         /* Animated Background */
-        .bg-animation {
+        .animated-bg {
             position: fixed;
             width: 100%;
             height: 100%;
             top: 0;
             left: 0;
             z-index: -1;
-            background: linear-gradient(45deg, #0a0a0a, #1a1a2e);
-            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0.03;
         }
 
-        .particle {
+        .floating-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .shape {
             position: absolute;
-            width: 3px;
-            height: 3px;
-            background: var(--accent-color);
+            opacity: 0.1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            left: 10%;
+            background: var(--gradient);
             border-radius: 50%;
-            opacity: 0.5;
-            animation: float 15s infinite linear;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            right: 20%;
+            background: var(--gradient-alt);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            animation-delay: 3s;
+        }
+
+        .shape:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            left: 50%;
+            background: var(--gradient);
+            transform: rotate(45deg);
+            animation-delay: 5s;
         }
 
         @keyframes float {
-            0% {
-                transform: translateY(100vh) translateX(0);
-                opacity: 0;
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
             }
-            10% {
-                opacity: 0.5;
+            33% {
+                transform: translateY(-100px) rotate(120deg);
             }
-            90% {
-                opacity: 0.5;
-            }
-            100% {
-                transform: translateY(-100vh) translateX(100px);
-                opacity: 0;
-            }
-        }
-
-        /* Data Stream Effect */
-        .data-stream {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.1;
-            overflow: hidden;
-        }
-
-        .stream-column {
-            position: absolute;
-            top: -100%;
-            width: 20px;
-            height: 100%;
-            font-family: monospace;
-            font-size: 14px;
-            color: var(--accent-color);
-            animation: stream 10s linear infinite;
-        }
-
-        @keyframes stream {
-            0% {
-                transform: translateY(-100%);
-            }
-            100% {
-                transform: translateY(100%);
+            66% {
+                transform: translateY(100px) rotate(240deg);
             }
         }
 
         /* Navigation */
         nav {
             position: fixed;
+            top: 0;
             width: 100%;
-            padding: 20px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
 
         nav.scrolled {
-            background-color: rgba(10, 10, 10, 0.9);
-            backdrop-filter: blur(10px);
-            padding: 15px 50px;
+            padding: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .logo {
-            font-size: 24px;
+            font-size: 1.5rem;
             font-weight: bold;
-            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            background: var(--gradient);
             -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-decoration: none;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .nav-links {
             display: flex;
+            gap: 2rem;
             list-style: none;
         }
 
-        .nav-links li {
-            margin-left: 30px;
-        }
-
         .nav-links a {
-            color: var(--light-text);
             text-decoration: none;
-            font-size: 16px;
-            position: relative;
+            color: var(--text);
+            font-weight: 500;
             transition: all 0.3s ease;
+            position: relative;
         }
 
         .nav-links a::after {
@@ -178,7 +155,7 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            background: var(--gradient);
             transition: width 0.3s ease;
         }
 
@@ -188,967 +165,814 @@
 
         /* Hero Section */
         .hero {
-            height: 100vh;
+            margin-top: 80px;
+            padding: 4rem 2rem;
+            min-height: 90vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
             position: relative;
             overflow: hidden;
         }
 
-        .hero-content {
-            text-align: center;
-            z-index: 2;
-            max-width: 800px;
-            padding: 0 20px;
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
         }
 
-        .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+        .hero-content h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: var(--gradient);
             -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: gradient 3s ease infinite;
-            background-size: 200% 200%;
-            overflow: hidden;
+            -webkit-text-fill-color: transparent;
+            animation: slideInLeft 1s ease;
         }
 
-        .hero-text-reveal {
-            display: inline-block;
-            position: relative;
+        .hero-content .subtitle {
+            font-size: 1.25rem;
+            color: var(--text);
+            margin-bottom: 2rem;
+            animation: slideInLeft 1s ease 0.2s both;
         }
 
-        .hero-text-reveal::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--dark-bg);
-            animation: revealText 2s forwards;
-            animation-delay: 0.5s;
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            animation: slideInLeft 1s ease 0.4s both;
         }
 
-        @keyframes revealText {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(100%);
-            }
-        }
-
-        @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        .hero p {
-            font-size: 1.5rem;
-            margin-bottom: 30px;
-            opacity: 0.8;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 15px 30px;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            color: white;
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
             text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            z-index: 1;
+            display: inline-block;
         }
 
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
-            z-index: -1;
-            transition: all 0.3s ease;
-            opacity: 0;
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
         }
 
-        .cta-button:hover::before {
-            opacity: 1;
-        }
-
-        .cta-button:hover {
+        .btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(142, 45, 226, 0.3);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
         }
 
-        .button-pulse {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
-            border-radius: 50px;
-            background: rgba(255, 255, 255, 0.2);
-            opacity: 0;
-            z-index: -1;
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
         }
 
-        .cta-button:hover .button-pulse {
-            animation: pulse 1.5s infinite;
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
         }
 
-        @keyframes pulse {
-            0% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 0.7;
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(1.5);
-                opacity: 0;
-            }
+        .hero-visual {
+            position: relative;
+            animation: slideInRight 1s ease;
         }
 
-        /* Interactive Neural Network */
         .neural-network {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            z-index: 1;
-            opacity: 0.3;
+            height: 500px;
+            position: relative;
         }
 
         .node {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 20px;
+            height: 20px;
+            background: var(--gradient);
             border-radius: 50%;
-            background: var(--accent-color);
-            box-shadow: 0 0 10px var(--accent-color);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.7;
+            }
         }
 
         .connection {
             position: absolute;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
             transform-origin: left center;
-            animation: pulseGlow 3s infinite alternate;
+            animation: flow 3s infinite linear;
         }
 
-        @keyframes pulseGlow {
+        @keyframes flow {
             0% {
                 opacity: 0.3;
-                box-shadow: 0 0 5px var(--accent-color);
-            }
-            100% {
-                opacity: 0.8;
-                box-shadow: 0 0 15px var(--accent-color);
-            }
-        }
-
-        /* Prediction Path Animation */
-        .prediction-path {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .input-dot {
-            position: absolute;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            box-shadow: 0 0 15px var(--primary-color);
-            left: 10%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .output-dot {
-            position: absolute;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background: var(--accent-color);
-            box-shadow: 0 0 15px var(--accent-color);
-            right: 10%;
-            top: 50%;
-            transform: translate(50%, -50%);
-        }
-
-        .path-line {
-            position: absolute;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-            top: 50%;
-            left: 10%;
-            width: 0;
-            transform: translateY(-50%);
-            animation: drawPath 3s forwards;
-            animation-delay: 1s;
-        }
-
-        @keyframes drawPath {
-            0% {
-                width: 0;
-            }
-            100% {
-                width: 80%;
-            }
-        }
-
-        /* Training Visualization */
-        .training-viz {
-            position: relative;
-            width: 100%;
-            height: 200px;
-            margin: 50px 0;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .viz-title {
-            position: absolute;
-            top: 10px;
-            left: 20px;
-            font-size: 14px;
-            opacity: 0.7;
-        }
-
-        .graph {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-        }
-
-        .loss-curve {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-        }
-
-        /* Voice Recognition Waves */
-        .voice-waves {
-            position: absolute;
-            bottom: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .wave-bar {
-            width: 4px;
-            height: 20px;
-            background: var(--accent-color);
-            border-radius: 2px;
-            animation: wave 1.5s infinite ease-in-out;
-        }
-
-        .wave-bar:nth-child(2) {
-            animation-delay: 0.1s;
-        }
-
-        .wave-bar:nth-child(3) {
-            animation-delay: 0.2s;
-        }
-
-        .wave-bar:nth-child(4) {
-            animation-delay: 0.3s;
-        }
-
-        .wave-bar:nth-child(5) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes wave {
-            0%, 100% {
-                height: 20px;
             }
             50% {
-                height: 40px;
-            }
-        }
-
-        /* Code Reveal Animation */
-        .code-container {
-            position: relative;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 20px;
-            margin: 30px 0;
-            font-family: monospace;
-            font-size: 14px;
-            overflow: hidden;
-        }
-
-        .code-title {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 12px;
-            opacity: 0.5;
-        }
-
-        .code-line {
-            margin: 5px 0;
-            opacity: 0;
-            animation: fadeInCode 0.5s forwards;
-        }
-
-        @keyframes fadeInCode {
-            to {
                 opacity: 1;
             }
+            100% {
+                opacity: 0.3;
+            }
         }
 
-        .code-keyword {
-            color: #c792ea;
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
-        .code-string {
-            color: #c3e88d;
-        }
-
-        .code-function {
-            color: #82aaff;
-        }
-
-        .code-comment {
-            color: #546e7a;
-            font-style: italic;
-        }
-
-        /* Services Section */
-        .services {
-            padding: 100px 50px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 50px;
-            position: relative;
-            display: inline-block;
-            width: 100%;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-        }
-
-        .service-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .service-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(74, 0, 224, 0.1), rgba(0, 212, 255, 0.1));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .service-card:hover::before {
-            opacity: 1;
-        }
-
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(74, 0, 224, 0.2);
-        }
-
-        .service-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .service-title {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-
-        .service-description {
-            opacity: 0.8;
-            line-height: 1.6;
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         /* Features Section */
         .features {
-            padding: 100px 50px;
-            background: rgba(255, 255, 255, 0.02);
+            padding: 5rem 2rem;
+            background: white;
         }
 
-        .feature-container {
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .features-grid {
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
         }
 
-        .feature-item {
-            text-align: center;
-            padding: 20px;
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
-        }
-
-        .feature-item:hover {
-            transform: scale(1.05);
-        }
-
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            box-shadow: 0 10px 20px rgba(74, 0, 224, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .feature-item:hover .feature-icon {
-            box-shadow: 0 15px 30px rgba(74, 0, 224, 0.4);
-            transform: rotate(5deg);
-        }
-
-        .feature-title {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-
-        /* Contact Section */
-        .contact {
-            padding: 100px 50px;
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .contact-form {
-            margin-top: 50px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            color: white;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
-        }
-
-        .submit-btn {
-            padding: 15px 30px;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 16px;
             position: relative;
             overflow: hidden;
         }
 
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(142, 45, 226, 0.3);
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .feature-card p {
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Blog Section */
+        .blog {
+            padding: 5rem 2rem;
+            background: var(--light);
+        }
+
+        .blog-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 200px;
+            background: var(--gradient);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .blog-content {
+            padding: 1.5rem;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            color: #718096;
+        }
+
+        .blog-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .blog-content h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--dark);
+        }
+
+        .blog-content p {
+            color: var(--text);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .read-more {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s ease;
+        }
+
+        .read-more:hover {
+            gap: 1rem;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 5rem 2rem;
+            background: var(--gradient);
+            color: white;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            animation: fadeInUp 1s ease;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.125rem;
+            opacity: 0.9;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 5rem 2rem;
+            background: white;
+            text-align: center;
+        }
+
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            color: var(--text);
+            margin-bottom: 2rem;
         }
 
         /* Footer */
         footer {
-            padding: 30px 50px;
-            background: rgba(0, 0, 0, 0.5);
-            text-align: center;
+            background: var(--dark);
+            color: white;
+            padding: 3rem 2rem 1rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent);
         }
 
         .social-links {
-            margin-top: 20px;
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
         }
 
         .social-links a {
-            display: inline-block;
             width: 40px;
             height: 40px;
-            line-height: 40px;
-            text-align: center;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            margin: 0 10px;
-            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.3s ease;
         }
 
         .social-links a:hover {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            background: var(--gradient);
             transform: translateY(-3px);
         }
 
-        /* Section Transitions */
-        .section-transition {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--dark-bg);
-            z-index: 10000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-        }
-
-        .section-transition.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .transition-content {
+        .footer-bottom {
             text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cbd5e0;
         }
 
-        .transition-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: spin 2s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Responsive Design */
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero p {
-                font-size: 1.2rem;
-            }
-            
-            nav {
-                padding: 15px 20px;
-            }
-            
             .nav-links {
                 display: none;
             }
-            
-            .services, .features, .contact {
-                padding: 50px 20px;
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
             }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .features-grid,
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Loading Animation */
+        .loading-text {
+            display: inline-block;
+            position: relative;
+        }
+
+        .loading-text::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            animation: loading 2s infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                width: 0;
+                left: 0;
+            }
+            50% {
+                width: 100%;
+                left: 0;
+            }
+            100% {
+                width: 0;
+                left: 100%;
+            }
+        }
+
+        /* Notification Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 2000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            width: 30px;
+            height: 30px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
         }
     </style>
 </head>
 <body>
-    <!-- Custom Cursor -->
-    <div class="custom-cursor" id="customCursor"></div>
-    <div class="cursor-trail" id="cursorTrail"></div>
-
     <!-- Animated Background -->
-    <div class="bg-animation" id="bgAnimation"></div>
-
-    <!-- Data Stream Effect -->
-    <div class="data-stream" id="dataStream"></div>
-
-    <!-- Section Transition -->
-    <div class="section-transition" id="sectionTransition">
-        <div class="transition-content">
-            <div class="transition-icon"><i class="fas fa-brain"></i></div>
-            <h2>Processing Data...</h2>
-        </div>
+    <div class="animated-bg"></div>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
     </div>
 
     <!-- Navigation -->
     <nav id="navbar">
-        <a href="#" class="logo">NeuralForge AI</a>
-        <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                NeuralFlow
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#stats">Stats</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
     </nav>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <div class="neural-network" id="neuralNetwork"></div>
-        <div class="prediction-path" id="predictionPath">
-            <div class="input-dot"></div>
-            <div class="path-line"></div>
-            <div class="output-dot"></div>
-        </div>
-        <div class="hero-content">
-            <h1><span class="hero-text-reveal">Transform Your Business with AI</span></h1>
-            <p>Unlock the power of machine learning and artificial intelligence to drive innovation and growth</p>
-            <a href="#services" class="cta-button">
-                Explore Our Solutions
-                <div class="button-pulse"></div>
-            </a>
-        </div>
-        <div class="voice-waves">
-            <div class="wave-bar"></div>
-            <div class="wave-bar"></div>
-            <div class="wave-bar"></div>
-            <div class="wave-bar"></div>
-            <div class="wave-bar"></div>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section class="services" id="services">
-        <h2 class="section-title">Our AI/ML Services</h2>
-        
-        <!-- Training Visualization -->
-        <div class="training-viz">
-            <div class="viz-title">Model Training Progress</div>
-            <div class="graph">
-                <canvas id="lossCurve" width="100%" height="100%"></canvas>
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Transform Your Business with AI</h1>
+                <p class="subtitle">Harness the power of machine learning and artificial intelligence to revolutionize your operations, enhance customer experiences, and drive unprecedented growth.</p>
+                <div class="hero-buttons">
+                    <a href="#features" class="btn btn-primary">Explore Solutions</a>
+                    <a href="#blog" class="btn btn-secondary">Read Our Blog</a>
+                </div>
             </div>
-        </div>
-        
-        <!-- Code Reveal Animation -->
-        <div class="code-container">
-            <div class="code-title">model.py</div>
-            <div id="codeReveal"></div>
-        </div>
-        
-        <div class="service-cards">
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-brain"></i></div>
-                <h3 class="service-title">Deep Learning Solutions</h3>
-                <p class="service-description">Custom neural networks designed to solve complex business problems with unprecedented accuracy and efficiency.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-chart-line"></i></div>
-                <h3 class="service-title">Predictive Analytics</h3>
-                <p class="service-description">Leverage historical data to forecast trends, identify opportunities, and make data-driven decisions with confidence.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-robot"></i></div>
-                <h3 class="service-title">Automation Systems</h3>
-                <p class="service-description">Streamline operations with intelligent automation that learns and adapts to your business processes.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-language"></i></div>
-                <h3 class="service-title">Natural Language Processing</h3>
-                <p class="service-description">Extract insights from text data, enable human-computer interaction, and automate language-based tasks.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-eye"></i></div>
-                <h3 class="service-title">Computer Vision</h3>
-                <p class="service-description">Transform visual data into actionable insights with advanced image recognition and analysis systems.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-cogs"></i></div>
-                <h3 class="service-title">AI Integration</h3>
-                <p class="service-description">Seamlessly incorporate AI capabilities into your existing systems and workflows for maximum impact.</p>
+            <div class="hero-visual">
+                <div class="neural-network" id="neuralNetwork"></div>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
     <section class="features" id="features">
-        <h2 class="section-title">Why Choose NeuralForge AI</h2>
-        <div class="feature-container">
-            <div class="feature-item">
-                <div class="feature-icon"><i class="fas fa-rocket"></i></div>
-                <h3 class="feature-title">Rapid Implementation</h3>
-                <p>From concept to deployment in weeks, not months</p>
+        <div class="section-header">
+            <h2>Cutting-Edge AI Solutions</h2>
+            <p>Empowering businesses with intelligent automation and data-driven insights</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>Intelligent Automation</h3>
+                <p>Streamline your workflows with AI-powered automation that learns and adapts to your business needs, reducing manual effort by up to 80%.</p>
             </div>
-            <div class="feature-item">
-                <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-                <h3 class="feature-title">Enterprise Security</h3>
-                <p>Bank-level encryption and data protection</p>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Predictive Analytics</h3>
+                <p>Leverage advanced machine learning algorithms to forecast trends, identify opportunities, and make data-driven decisions with confidence.</p>
             </div>
-            <div class="feature-item">
-                <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
-                <h3 class="feature-title">Measurable ROI</h3>
-                <p>Track performance and demonstrate value</p>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>AI Security</h3>
+                <p>Protect your digital assets with intelligent threat detection and prevention systems that evolve alongside emerging cyber threats.</p>
             </div>
-            <div class="feature-item">
-                <div class="feature-icon"><i class="fas fa-users"></i></div>
-                <h3 class="feature-title">Expert Support</h3>
-                <p>24/7 assistance from AI specialists</p>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3>Natural Language Processing</h3>
+                <p>Transform customer interactions with advanced NLP capabilities that understand context, sentiment, and intent in real-time.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <h3>Computer Vision</h3>
+                <h3>Unlock insights from visual data with state-of-the-art computer vision technology for image recognition and analysis.</h3>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <h3>Custom AI Models</h3>
+                <p>Build tailored AI solutions specifically designed for your unique business challenges and industry requirements.</p>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section class="contact" id="contact">
-        <h2 class="section-title">Start Your AI Journey</h2>
-        <p>Ready to transform your business with AI? Get in touch with our experts today.</p>
-        <form class="contact-form" action="#" method="post">
-            <div class="form-group">
-                <label for="name">Your Name</label>
-                <input type="text" id="name" name="name" class="form-control" required>
+    <!-- Blog Section -->
+    <section class="blog" id="blog">
+        <div class="section-header">
+            <h2>Latest AI Insights</h2>
+            <p>Stay updated with the latest trends and breakthroughs in artificial intelligence</p>
+        </div>
+        <div class="blog-grid">
+            <article class="blog-card" onclick="showToast('Opening article...')">
+                <div class="blog-image">
+                    <img src="https://picsum.photos/seed/ai1/400/200.jpg" alt="AI Blog">
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span><i class="far fa-calendar"></i> Nov 15, 2024</span>
+                        <span><i class="far fa-clock"></i> 5 min read</span>
+                    </div>
+                    <h3>The Future of Generative AI in Business</h3>
+                    <p>Explore how generative AI is revolutionizing content creation, product design, and customer engagement across industries.</p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+            <article class="blog-card" onclick="showToast('Opening article...')">
+                <div class="blog-image">
+                    <img src="https://picsum.photos/seed/ml2/400/200.jpg" alt="ML Blog">
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span><i class="far fa-calendar"></i> Nov 12, 2024</span>
+                        <span><i class="far fa-clock"></i> 7 min read</span>
+                    </div>
+                    <h3>Machine Learning in Healthcare: Real-World Applications</h3>
+                    <p>Discover how ML algorithms are transforming patient care, drug discovery, and medical diagnostics with unprecedented accuracy.</p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+            <article class="blog-card" onclick="showToast('Opening article...')">
+                <div class="blog-image">
+                    <img src="https://picsum.photos/seed/ai3/400/200.jpg" alt="AI Ethics">
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span><i class="far fa-calendar"></i> Nov 10, 2024</span>
+                        <span><i class="far fa-clock"></i> 6 min read</span>
+                    </div>
+                    <h3>Ethical AI: Building Trustworthy Systems</h3>
+                    <p>Learn about the importance of ethical considerations in AI development and how to build responsible, transparent AI systems.</p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats" id="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number" data-target="500">0</div>
+                <div class="stat-label">AI Solutions Deployed</div>
             </div>
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" class="form-control" required>
+            <div class="stat-item">
+                <div class="stat-number" data-target="98">0</div>
+                <div class="stat-label">Client Satisfaction %</div>
             </div>
-            <div class="form-group">
-                <label for="company">Company</label>
-                <input type="text" id="company" name="company" class="form-control">
+            <div class="stat-item">
+                <div class="stat-number" data-target="50">0</div>
+                <div class="stat-label">AI Experts</div>
             </div>
-            <div class="form-group">
-                <label for="message">Tell us about your project</label>
-                <textarea id="message" name="message" rows="5" class="form-control" required></textarea>
+            <div class="stat-item">
+                <div class="stat-number" data-target="24">0</div>
+                <div class="stat-label">Global Awards</div>
             </div>
-            <button type="submit" class="submit-btn">Send Message</button>
-        </form>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="cta-container">
+            <h2>Ready to Transform Your Business?</h2>
+            <p>Join hundreds of companies leveraging AI to drive innovation and growth</p>
+            <button class="btn btn-primary" onclick="showToast('Thank you for your interest! We\'ll contact you soon.')">
+                Get Started Today
+            </button>
+        </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2023 NeuralForge AI. All rights reserved.</p>
-        <div class="social-links">
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-linkedin"></i></a>
-            <a href="#"><i class="fab fa-github"></i></a>
-            <a href="#"><i class="fab fa-facebook"></i></a>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>NeuralFlow</h3>
+                <p>Pioneering the future of artificial intelligence and machine learning solutions for businesses worldwide.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#stats">Statistics</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Services</h3>
+                <ul>
+                    <li><a href="#">AI Consulting</a></li>
+                    <li><a href="#">ML Development</a></li>
+                    <li><a href="#">Data Analytics</a></li>
+                    <li><a href="#">AI Training</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <ul>
+                    <li><i class="fas fa-envelope"></i> info@neuralflow.ai</li>
+                    <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                    <li><i class="fas fa-map-marker-alt"></i> San Francisco, CA</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 NeuralFlow. All rights reserved. | Privacy Policy | Terms of Service</p>
         </div>
     </footer>
 
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <div class="toast-icon">
+            <i class="fas fa-check"></i>
+        </div>
+        <div class="toast-message" id="toastMessage">Success!</div>
+    </div>
+
     <script>
-        // Custom Cursor
-        function initCustomCursor() {
-            const cursor = document.getElementById('customCursor');
-            const trail = document.getElementById('cursorTrail');
-            
-            document.addEventListener('mousemove', (e) => {
-                cursor.style.left = e.clientX - 10 + 'px';
-                cursor.style.top = e.clientY - 10 + 'px';
-                
-                setTimeout(() => {
-                    trail.style.left = e.clientX - 20 + 'px';
-                    trail.style.top = e.clientY - 20 + 'px';
-                }, 100);
-            });
-            
-            // Change cursor color based on section
-            const sections = document.querySelectorAll('section');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const sectionId = entry.target.id;
-                        
-                        if (sectionId === 'home') {
-                            cursor.style.background = 'rgba(0, 212, 255, 0.5)';
-                            trail.style.borderColor = 'rgba(0, 212, 255, 0.3)';
-                        } else if (sectionId === 'services') {
-                            cursor.style.background = 'rgba(142, 45, 226, 0.5)';
-                            trail.style.borderColor = 'rgba(142, 45, 226, 0.3)';
-                        } else if (sectionId === 'features') {
-                            cursor.style.background = 'rgba(74, 0, 224, 0.5)';
-                            trail.style.borderColor = 'rgba(74, 0, 224, 0.3)';
-                        } else if (sectionId === 'contact') {
-                            cursor.style.background = 'rgba(255, 105, 180, 0.5)';
-                            trail.style.borderColor = 'rgba(255, 105, 180, 0.3)';
-                        }
-                    }
-                });
-            }, { threshold: 0.5 });
-            
-            sections.forEach(section => {
-                observer.observe(section);
-            });
-            
-            // Scale effect on clickable elements
-            const clickableElements = document.querySelectorAll('a, button, .service-card, .feature-item');
-            
-            clickableElements.forEach(element => {
-                element.addEventListener('mouseenter', () => {
-                    cursor.style.transform = 'scale(2)';
-                });
-                
-                element.addEventListener('mouseleave', () => {
-                    cursor.style.transform = 'scale(1)';
-                });
-            });
-        }
-
-        // Create animated particles
-        function createParticles() {
-            const bgAnimation = document.getElementById('bgAnimation');
-            const particleCount = 50;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 15 + 's';
-                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
-                bgAnimation.appendChild(particle);
-            }
-        }
-
-        // Create data stream effect
-        function createDataStream() {
-            const dataStream = document.getElementById('dataStream');
-            const streamCount = 10;
-            
-            for (let i = 0; i < streamCount; i++) {
-                const stream = document.createElement('div');
-                stream.classList.add('stream-column');
-                stream.style.left = (i * 10) + '%';
-                stream.style.animationDelay = Math.random() * 10 + 's';
-                stream.style.animationDuration = (10 + Math.random() * 5) + 's';
-                
-                // Generate binary data
-                let binaryData = '';
-                for (let j = 0; j < 100; j++) {
-                    binaryData += Math.random() > 0.5 ? '1' : '0';
-                    if (j % 10 === 9) binaryData += '<br>';
-                }
-                
-                stream.innerHTML = binaryData;
-                dataStream.appendChild(stream);
-            }
-            
-            // Make streams react to mouse movement
-            document.addEventListener('mousemove', (e) => {
-                const mouseX = e.clientX / window.innerWidth;
-                const mouseY = e.clientY / window.innerHeight;
-                
-                const streams = document.querySelectorAll('.stream-column');
-                streams.forEach((stream, index) => {
-                    const streamX = index / streamCount;
-                    const distance = Math.abs(mouseX - streamX);
-                    
-                    if (distance < 0.2) {
-                        const curve = (mouseY - 0.5) * 20;
-                        stream.style.transform = `translateX(${curve}px)`;
-                    } else {
-                        stream.style.transform = 'translateX(0)';
-                    }
-                });
-            });
-        }
-
-        // Create interactive neural network
+        // Neural Network Animation
         function createNeuralNetwork() {
-            const neuralNetwork = document.getElementById('neuralNetwork');
-            const nodeCount = 15;
+            const container = document.getElementById('neuralNetwork');
+            const layers = [3, 5, 4, 3];
             const nodes = [];
-            
+            const connections = [];
+
             // Create nodes
-            for (let i = 0; i < nodeCount; i++) {
-                const node = document.createElement('div');
-                node.classList.add('node');
-                
-                const x = Math.random() * 100;
-                const y = Math.random() * 100;
-                
-                node.style.left = x + '%';
-                node.style.top = y + '%';
-                
-                neuralNetwork.appendChild(node);
-                nodes.push({ element: node, x, y });
-            }
-            
+            layers.forEach((nodeCount, layerIndex) => {
+                for (let i = 0; i < nodeCount; i++) {
+                    const node = document.createElement('div');
+                    node.className = 'node';
+                    const x = (layerIndex * 25) + 10;
+                    const y = ((i + 1) * (100 / (nodeCount + 1)));
+                    node.style.left = x + '%';
+                    node.style.top = y + '%';
+                    node.style.animationDelay = (Math.random() * 2) + 's';
+                    container.appendChild(node);
+                    nodes.push({ element: node, x, y, layer: layerIndex });
+                }
+            });
+
             // Create connections
-            for (let i = 0; i < nodeCount; i++) {
-                for (let j = i + 1; j < nodeCount; j++) {
-                    if (Math.random() > 0.7) {
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    if (nodes[j].layer === nodes[i].layer + 1) {
                         const connection = document.createElement('div');
-                        connection.classList.add('connection');
+                        connection.className = 'connection';
                         
                         const x1 = nodes[i].x;
                         const y1 = nodes[i].y;
@@ -1162,217 +986,81 @@
                         connection.style.left = x1 + '%';
                         connection.style.top = y1 + '%';
                         connection.style.transform = `rotate(${angle}deg)`;
+                        connection.style.animationDelay = (Math.random() * 3) + 's';
                         
-                        neuralNetwork.appendChild(connection);
+                        container.appendChild(connection);
                     }
                 }
             }
-            
-            // Animate nodes on mouse move
-            document.addEventListener('mousemove', (e) => {
-                const mouseX = e.clientX / window.innerWidth;
-                const mouseY = e.clientY / window.innerHeight;
-                
-                nodes.forEach(node => {
-                    const distance = Math.sqrt(
-                        Math.pow(mouseX - node.x / 100, 2) + 
-                        Math.pow(mouseY - node.y / 100, 2)
-                    );
-                    
-                    if (distance < 0.2) {
-                        const moveX = (node.x / 100 - mouseX) * 10;
-                        const moveY = (node.y / 100 - mouseY) * 10;
-                        
-                        node.element.style.transform = `translate(${moveX}px, ${moveY}px)`;
-                        node.element.style.boxShadow = '0 0 20px var(--accent-color)';
-                    } else {
-                        node.element.style.transform = 'translate(0, 0)';
-                        node.element.style.boxShadow = '0 0 10px var(--accent-color)';
-                    }
-                });
-            });
         }
 
-        // Training Visualization
-        function initTrainingVisualization() {
-            const canvas = document.getElementById('lossCurve');
-            const ctx = canvas.getContext('2d');
-            
-            // Set canvas size
-            canvas.width = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
-            
-            // Generate initial data
-            const epochs = 100;
-            const lossData = [];
-            let currentEpoch = 0;
-            
-            for (let i = 0; i < epochs; i++) {
-                // Simulate decreasing loss with some noise
-                const loss = 2 * Math.exp(-i / 20) + 0.1 * Math.random();
-                lossData.push(loss);
-            }
-            
-            // Draw function
-            function drawLossCurve() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                // Draw axes
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(40, 20);
-                ctx.lineTo(40, canvas.height - 40);
-                ctx.lineTo(canvas.width - 20, canvas.height - 40);
-                ctx.stroke();
-                
-                // Draw labels
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-                ctx.font = '12px monospace';
-                ctx.fillText('Loss', 10, 20);
-                ctx.fillText('Epochs', canvas.width - 50, canvas.height - 20);
-                
-                // Draw curve
-                ctx.strokeStyle = 'var(--accent-color)';
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                
-                const xStep = (canvas.width - 60) / epochs;
-                const yScale = (canvas.height - 60) / 2;
-                
-                for (let i = 0; i <= currentEpoch && i < epochs; i++) {
-                    const x = 40 + i * xStep;
-                    const y = canvas.height - 40 - lossData[i] * yScale;
-                    
-                    if (i === 0) {
-                        ctx.moveTo(x, y);
-                    } else {
-                        ctx.lineTo(x, y);
-                    }
-                }
-                
-                ctx.stroke();
-                
-                // Draw current point
-                if (currentEpoch > 0 && currentEpoch <= epochs) {
-                    const x = 40 + currentEpoch * xStep;
-                    const y = canvas.height - 40 - lossData[currentEpoch - 1] * yScale;
-                    
-                    ctx.fillStyle = 'var(--accent-color)';
-                    ctx.beginPath();
-                    ctx.arc(x, y, 4, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                
-                // Draw current epoch value
-                if (currentEpoch > 0 && currentEpoch <= epochs) {
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-                    ctx.font = '12px monospace';
-                    ctx.fillText(`Epoch: ${currentEpoch}/${epochs}`, canvas.width - 100, 20);
-                    ctx.fillText(`Loss: ${lossData[currentEpoch - 1].toFixed(4)}`, canvas.width - 100, 40);
-                }
-            }
-            
-            // Animation loop
-            function animate() {
-                if (currentEpoch < epochs) {
-                    currentEpoch += 1;
-                    drawLossCurve();
-                    setTimeout(animate, 50);
-                } else {
-                    // Reset and restart
-                    setTimeout(() => {
-                        currentEpoch = 0;
-                        animate();
-                    }, 2000);
-                }
-            }
-            
-            // Start animation when visible
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        animate();
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.5 });
-            
-            observer.observe(canvas);
-        }
+        // Initialize neural network
+        createNeuralNetwork();
 
-        // Code Reveal Animation
-        function initCodeReveal() {
-            const codeContainer = document.getElementById('codeReveal');
-            
-            const codeLines = [
-                '<span class="code-comment"># Define our neural network model</span>',
-                '<span class="code-keyword">class</span> <span class="code-function">NeuralNetwork</span>(nn.Module):',
-                '    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):',
-                '        <span class="code-keyword">super</span>(NeuralNetwork, <span class="code-keyword">self</span>).__init__()',
-                '        <span class="code-keyword">self</span>.layer1 = nn.Linear(784, 128)',
-                '        <span class="code-keyword">self</span>.layer2 = nn.Linear(128, 64)',
-                '        <span class="code-keyword">self</span>.layer3 = nn.Linear(64, 10)',
-                '        <span class="code-keyword">self</span>.relu = nn.ReLU()',
-                '',
-                '    <span class="code-keyword">def</span> <span class="code-function">forward</span>(<span class="code-keyword">self</span>, x):',
-                '        x = <span class="code-keyword">self</span>.relu(<span class="code-keyword">self</span>.layer1(x))',
-                '        x = <span class="code-keyword">self</span>.relu(<span class="code-keyword">self</span>.layer2(x))',
-                '        x = <span class="code-keyword">self</span>.layer3(x)',
-                '        <span class="code-keyword">return</span> x',
-                '',
-                '<span class="code-comment"># Initialize and train the model</span>',
-                'model = NeuralNetwork()',
-                'optimizer = torch.optim.Adam(model.parameters(), lr=0.001)',
-                'criterion = nn.CrossEntropyLoss()',
-                '',
-                '<span class="code-keyword">for</span> epoch <span class="code-keyword">in</span> range(100):',
-                '    <span class="code-keyword">for</span> inputs, labels <span class="code-keyword">in</span> dataloader:',
-                '        outputs = model(inputs)',
-                '        loss = criterion(outputs, labels)',
-                '        optimizer.zero_grad()',
-                '        loss.backward()',
-                '        optimizer.step()'
-            ];
-            
-            // Add code lines with delay
-            codeLines.forEach((line, index) => {
-                const codeLine = document.createElement('div');
-                codeLine.classList.add('code-line');
-                codeLine.innerHTML = line;
-                codeLine.style.animationDelay = `${index * 0.1}s`;
-                codeContainer.appendChild(codeLine);
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             });
-        }
-
-        // Section Transitions
-        function initSectionTransitions() {
-            const sections = document.querySelectorAll('section');
-            const sectionTransition = document.getElementById('sectionTransition');
-            let lastSection = null;
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting && entry.target.id !== lastSection) {
-                        lastSection = entry.target.id;
-                        
-                        // Show transition
-                        sectionTransition.classList.add('active');
-                        
-                        // Hide transition after a short delay
-                        setTimeout(() => {
-                            sectionTransition.classList.remove('active');
-                        }, 800);
-                    }
-                });
-            }, { threshold: 0.1 });
-            
-            sections.forEach(section => {
-                observer.observe(section);
-            });
-        }
+        });
 
         // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Animated counter for stats
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            const speed = 200;
+
+            counters.forEach(counter => {
+                const animate = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    const increment = target / speed;
+
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + increment);
+                        setTimeout(animate, 10);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                animate();
+            });
+        }
+
+ feature/login
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (entry.target.classList.contains('stats')) {
+                        animateCounters();
+                        observer.unobserve(entry.target);
+                    }
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+
+        // Navbar scroll effect facing
         function initNavbarScroll() {
             const navbar = document.getElementById('navbar');
             
@@ -1381,67 +1069,81 @@
                     navbar.classList.add('scrolled');
                 } else {
                     navbar.classList.remove('scrolled');
+ staging
                 }
             });
-        }
+        }, observerOptions);
 
-        // Smooth scrolling for anchor links
-        function initSmoothScrolling() {
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-                    
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 70,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-        }
+        // Observe elements
+        document.querySelectorAll('.feature-card, .blog-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
 
-        // Form submission handling
-        function initFormHandling() {
-            const form = document.querySelector('.contact-form');
+        document.querySelector('.stats').style.opacity = '0';
+        observer.observe(document.querySelector('.stats'));
+
+        // Toast notification function
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            toast.classList.add('show');
             
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                
-                // Create a success message
-                const successMessage = document.createElement('div');
-                successMessage.style.padding = '20px';
-                successMessage.style.marginTop = '20px';
-                successMessage.style.background = 'rgba(0, 212, 255, 0.2)';
-                successMessage.style.borderRadius = '5px';
-                successMessage.style.border = '1px solid rgba(0, 212, 255, 0.5)';
-                successMessage.textContent = 'Thank you for your message! Our team will get back to you soon.';
-                
-                form.appendChild(successMessage);
-                form.reset();
-                
-                // Remove the message after 5 seconds
-                setTimeout(() => {
-                    successMessage.remove();
-                }, 5000);
-            });
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
         }
 
-        // Initialize all functions when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            initCustomCursor();
-            createParticles();
-            createDataStream();
-            createNeuralNetwork();
-            initTrainingVisualization();
-            initCodeReveal();
-            initSectionTransitions();
-            initNavbarScroll();
-            initSmoothScrolling();
-            initFormHandling();
+        // Add parallax effect to hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+        });
+
+        // Dynamic typing effect for hero title
+        const heroTitle = document.querySelector('.hero-content h1');
+        const originalText = heroTitle.textContent;
+        let charIndex = 0;
+
+        function typeWriter() {
+            if (charIndex < originalText.length) {
+                heroTitle.textContent = originalText.substring(0, charIndex + 1);
+                charIndex++;
+                setTimeout(typeWriter, 50);
+            }
+        }
+
+        // Start typing effect when page loads
+        window.addEventListener('load', () => {
+            heroTitle.textContent = '';
+            typeWriter();
+        });
+
+        // Add hover effect to feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Blog card interaction
+        document.querySelectorAll('.blog-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.querySelector('.blog-image img').style.transform = 'scale(1.1)';
+                this.querySelector('.blog-image img').style.transition = 'transform 0.3s ease';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.querySelector('.blog-image img').style.transform = 'scale(1)';
+            });
         });
     </script>
 </body>
