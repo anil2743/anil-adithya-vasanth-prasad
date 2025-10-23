@@ -27,6 +27,31 @@
             background-color: var(--dark-bg);
             color: var(--light-text);
             overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(0, 212, 255, 0.5);
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.3s ease;
         }
 
         /* Animated Background */
@@ -65,6 +90,39 @@
             100% {
                 transform: translateY(-100vh) translateX(100px);
                 opacity: 0;
+            }
+        }
+
+        /* Data Stream Effect */
+        .data-stream {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.1;
+            overflow: hidden;
+        }
+
+        .stream-column {
+            position: absolute;
+            top: -100%;
+            width: 20px;
+            height: 100%;
+            font-family: monospace;
+            font-size: 14px;
+            color: var(--accent-color);
+            animation: stream 10s linear infinite;
+        }
+
+        @keyframes stream {
+            0% {
+                transform: translateY(-100%);
+            }
+            100% {
+                transform: translateY(100%);
             }
         }
 
@@ -155,6 +213,33 @@
             color: transparent;
             animation: gradient 3s ease infinite;
             background-size: 200% 200%;
+            overflow: hidden;
+        }
+
+        .hero-text-reveal {
+            display: inline-block;
+            position: relative;
+        }
+
+        .hero-text-reveal::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            animation: revealText 2s forwards;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes revealText {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
         }
 
         @keyframes gradient {
@@ -211,6 +296,34 @@
             box-shadow: 0 10px 20px rgba(142, 45, 226, 0.3);
         }
 
+        .button-pulse {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            z-index: -1;
+        }
+
+        .cta-button:hover .button-pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 0;
+            }
+        }
+
         /* Interactive Neural Network */
         .neural-network {
             position: absolute;
@@ -236,6 +349,202 @@
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
             transform-origin: left center;
+            animation: pulseGlow 3s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                opacity: 0.3;
+                box-shadow: 0 0 5px var(--accent-color);
+            }
+            100% {
+                opacity: 0.8;
+                box-shadow: 0 0 15px var(--accent-color);
+            }
+        }
+
+        /* Prediction Path Animation */
+        .prediction-path {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .input-dot {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            box-shadow: 0 0 15px var(--primary-color);
+            left: 10%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .output-dot {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            box-shadow: 0 0 15px var(--accent-color);
+            right: 10%;
+            top: 50%;
+            transform: translate(50%, -50%);
+        }
+
+        .path-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            top: 50%;
+            left: 10%;
+            width: 0;
+            transform: translateY(-50%);
+            animation: drawPath 3s forwards;
+            animation-delay: 1s;
+        }
+
+        @keyframes drawPath {
+            0% {
+                width: 0;
+            }
+            100% {
+                width: 80%;
+            }
+        }
+
+        /* Training Visualization */
+        .training-viz {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            margin: 50px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .viz-title {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .graph {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .loss-curve {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        /* Voice Recognition Waves */
+        .voice-waves {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .wave-bar {
+            width: 4px;
+            height: 20px;
+            background: var(--accent-color);
+            border-radius: 2px;
+            animation: wave 1.5s infinite ease-in-out;
+        }
+
+        .wave-bar:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .wave-bar:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .wave-bar:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .wave-bar:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes wave {
+            0%, 100% {
+                height: 20px;
+            }
+            50% {
+                height: 40px;
+            }
+        }
+
+        /* Code Reveal Animation */
+        .code-container {
+            position: relative;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            font-family: monospace;
+            font-size: 14px;
+            overflow: hidden;
+        }
+
+        .code-title {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 12px;
+            opacity: 0.5;
+        }
+
+        .code-line {
+            margin: 5px 0;
+            opacity: 0;
+            animation: fadeInCode 0.5s forwards;
+        }
+
+        @keyframes fadeInCode {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .code-keyword {
+            color: #c792ea;
+        }
+
+        .code-string {
+            color: #c3e88d;
+        }
+
+        .code-function {
+            color: #82aaff;
+        }
+
+        .code-comment {
+            color: #546e7a;
+            font-style: italic;
         }
 
         /* Services Section */
@@ -420,6 +729,8 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 16px;
+            position: relative;
+            overflow: hidden;
         }
 
         .submit-btn:hover {
@@ -456,17 +767,49 @@
             transform: translateY(-3px);
         }
 
-        /* Mouse Follower */
-        .mouse-follower {
+        /* Section Transitions */
+        .section-transition {
             position: fixed;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: rgba(0, 212, 255, 0.5);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
             pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s ease;
-            mix-blend-mode: difference;
+            transition: opacity 0.5s ease;
+        }
+
+        .section-transition.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .transition-content {
+            text-align: center;
+        }
+
+        .transition-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* Responsive Design */
@@ -494,11 +837,23 @@
     </style>
 </head>
 <body>
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="customCursor"></div>
+    <div class="cursor-trail" id="cursorTrail"></div>
+
     <!-- Animated Background -->
     <div class="bg-animation" id="bgAnimation"></div>
 
-    <!-- Mouse Follower -->
-    <div class="mouse-follower" id="mouseFollower"></div>
+    <!-- Data Stream Effect -->
+    <div class="data-stream" id="dataStream"></div>
+
+    <!-- Section Transition -->
+    <div class="section-transition" id="sectionTransition">
+        <div class="transition-content">
+            <div class="transition-icon"><i class="fas fa-brain"></i></div>
+            <h2>Processing Data...</h2>
+        </div>
+    </div>
 
     <!-- Navigation -->
     <nav id="navbar">
@@ -514,16 +869,46 @@
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="neural-network" id="neuralNetwork"></div>
+        <div class="prediction-path" id="predictionPath">
+            <div class="input-dot"></div>
+            <div class="path-line"></div>
+            <div class="output-dot"></div>
+        </div>
         <div class="hero-content">
-            <h1>Transform Your Business with AI</h1>
+            <h1><span class="hero-text-reveal">Transform Your Business with AI</span></h1>
             <p>Unlock the power of machine learning and artificial intelligence to drive innovation and growth</p>
-            <a href="#services" class="cta-button">Explore Our Solutions</a>
+            <a href="#services" class="cta-button">
+                Explore Our Solutions
+                <div class="button-pulse"></div>
+            </a>
+        </div>
+        <div class="voice-waves">
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
         </div>
     </section>
 
     <!-- Services Section -->
     <section class="services" id="services">
         <h2 class="section-title">Our AI/ML Services</h2>
+        
+        <!-- Training Visualization -->
+        <div class="training-viz">
+            <div class="viz-title">Model Training Progress</div>
+            <div class="graph">
+                <canvas id="lossCurve" width="100%" height="100%"></canvas>
+            </div>
+        </div>
+        
+        <!-- Code Reveal Animation -->
+        <div class="code-container">
+            <div class="code-title">model.py</div>
+            <div id="codeReveal"></div>
+        </div>
+        
         <div class="service-cards">
             <div class="service-card">
                 <div class="service-icon"><i class="fas fa-brain"></i></div>
@@ -622,6 +1007,63 @@
     </footer>
 
     <script>
+        // Custom Cursor
+        function initCustomCursor() {
+            const cursor = document.getElementById('customCursor');
+            const trail = document.getElementById('cursorTrail');
+            
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX - 10 + 'px';
+                cursor.style.top = e.clientY - 10 + 'px';
+                
+                setTimeout(() => {
+                    trail.style.left = e.clientX - 20 + 'px';
+                    trail.style.top = e.clientY - 20 + 'px';
+                }, 100);
+            });
+            
+            // Change cursor color based on section
+            const sections = document.querySelectorAll('section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const sectionId = entry.target.id;
+                        
+                        if (sectionId === 'home') {
+                            cursor.style.background = 'rgba(0, 212, 255, 0.5)';
+                            trail.style.borderColor = 'rgba(0, 212, 255, 0.3)';
+                        } else if (sectionId === 'services') {
+                            cursor.style.background = 'rgba(142, 45, 226, 0.5)';
+                            trail.style.borderColor = 'rgba(142, 45, 226, 0.3)';
+                        } else if (sectionId === 'features') {
+                            cursor.style.background = 'rgba(74, 0, 224, 0.5)';
+                            trail.style.borderColor = 'rgba(74, 0, 224, 0.3)';
+                        } else if (sectionId === 'contact') {
+                            cursor.style.background = 'rgba(255, 105, 180, 0.5)';
+                            trail.style.borderColor = 'rgba(255, 105, 180, 0.3)';
+                        }
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+            
+            // Scale effect on clickable elements
+            const clickableElements = document.querySelectorAll('a, button, .service-card, .feature-item');
+            
+            clickableElements.forEach(element => {
+                element.addEventListener('mouseenter', () => {
+                    cursor.style.transform = 'scale(2)';
+                });
+                
+                element.addEventListener('mouseleave', () => {
+                    cursor.style.transform = 'scale(1)';
+                });
+            });
+        }
+
         // Create animated particles
         function createParticles() {
             const bgAnimation = document.getElementById('bgAnimation');
@@ -635,6 +1077,49 @@
                 particle.style.animationDuration = (15 + Math.random() * 10) + 's';
                 bgAnimation.appendChild(particle);
             }
+        }
+
+        // Create data stream effect
+        function createDataStream() {
+            const dataStream = document.getElementById('dataStream');
+            const streamCount = 10;
+            
+            for (let i = 0; i < streamCount; i++) {
+                const stream = document.createElement('div');
+                stream.classList.add('stream-column');
+                stream.style.left = (i * 10) + '%';
+                stream.style.animationDelay = Math.random() * 10 + 's';
+                stream.style.animationDuration = (10 + Math.random() * 5) + 's';
+                
+                // Generate binary data
+                let binaryData = '';
+                for (let j = 0; j < 100; j++) {
+                    binaryData += Math.random() > 0.5 ? '1' : '0';
+                    if (j % 10 === 9) binaryData += '<br>';
+                }
+                
+                stream.innerHTML = binaryData;
+                dataStream.appendChild(stream);
+            }
+            
+            // Make streams react to mouse movement
+            document.addEventListener('mousemove', (e) => {
+                const mouseX = e.clientX / window.innerWidth;
+                const mouseY = e.clientY / window.innerHeight;
+                
+                const streams = document.querySelectorAll('.stream-column');
+                streams.forEach((stream, index) => {
+                    const streamX = index / streamCount;
+                    const distance = Math.abs(mouseX - streamX);
+                    
+                    if (distance < 0.2) {
+                        const curve = (mouseY - 0.5) * 20;
+                        stream.style.transform = `translateX(${curve}px)`;
+                    } else {
+                        stream.style.transform = 'translateX(0)';
+                    }
+                });
+            });
         }
 
         // Create interactive neural network
@@ -699,35 +1184,191 @@
                         const moveY = (node.y / 100 - mouseY) * 10;
                         
                         node.element.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                        node.element.style.boxShadow = '0 0 20px var(--accent-color)';
                     } else {
                         node.element.style.transform = 'translate(0, 0)';
+                        node.element.style.boxShadow = '0 0 10px var(--accent-color)';
                     }
                 });
             });
         }
 
-        // Mouse follower effect
-        function initMouseFollower() {
-            const mouseFollower = document.getElementById('mouseFollower');
+        // Training Visualization
+        function initTrainingVisualization() {
+            const canvas = document.getElementById('lossCurve');
+            const ctx = canvas.getContext('2d');
             
-            document.addEventListener('mousemove', (e) => {
-                mouseFollower.style.left = e.clientX - 10 + 'px';
-                mouseFollower.style.top = e.clientY - 10 + 'px';
-            });
+            // Set canvas size
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
             
-            // Scale effect on clickable elements
-            const clickableElements = document.querySelectorAll('a, button, .service-card, .feature-item');
+            // Generate initial data
+            const epochs = 100;
+            const lossData = [];
+            let currentEpoch = 0;
             
-            clickableElements.forEach(element => {
-                element.addEventListener('mouseenter', () => {
-                    mouseFollower.style.transform = 'scale(2)';
-                    mouseFollower.style.background = 'rgba(142, 45, 226, 0.5)';
-                });
+            for (let i = 0; i < epochs; i++) {
+                // Simulate decreasing loss with some noise
+                const loss = 2 * Math.exp(-i / 20) + 0.1 * Math.random();
+                lossData.push(loss);
+            }
+            
+            // Draw function
+            function drawLossCurve() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
-                element.addEventListener('mouseleave', () => {
-                    mouseFollower.style.transform = 'scale(1)';
-                    mouseFollower.style.background = 'rgba(0, 212, 255, 0.5)';
+                // Draw axes
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(40, 20);
+                ctx.lineTo(40, canvas.height - 40);
+                ctx.lineTo(canvas.width - 20, canvas.height - 40);
+                ctx.stroke();
+                
+                // Draw labels
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                ctx.font = '12px monospace';
+                ctx.fillText('Loss', 10, 20);
+                ctx.fillText('Epochs', canvas.width - 50, canvas.height - 20);
+                
+                // Draw curve
+                ctx.strokeStyle = 'var(--accent-color)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                
+                const xStep = (canvas.width - 60) / epochs;
+                const yScale = (canvas.height - 60) / 2;
+                
+                for (let i = 0; i <= currentEpoch && i < epochs; i++) {
+                    const x = 40 + i * xStep;
+                    const y = canvas.height - 40 - lossData[i] * yScale;
+                    
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                
+                ctx.stroke();
+                
+                // Draw current point
+                if (currentEpoch > 0 && currentEpoch <= epochs) {
+                    const x = 40 + currentEpoch * xStep;
+                    const y = canvas.height - 40 - lossData[currentEpoch - 1] * yScale;
+                    
+                    ctx.fillStyle = 'var(--accent-color)';
+                    ctx.beginPath();
+                    ctx.arc(x, y, 4, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                // Draw current epoch value
+                if (currentEpoch > 0 && currentEpoch <= epochs) {
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                    ctx.font = '12px monospace';
+                    ctx.fillText(`Epoch: ${currentEpoch}/${epochs}`, canvas.width - 100, 20);
+                    ctx.fillText(`Loss: ${lossData[currentEpoch - 1].toFixed(4)}`, canvas.width - 100, 40);
+                }
+            }
+            
+            // Animation loop
+            function animate() {
+                if (currentEpoch < epochs) {
+                    currentEpoch += 1;
+                    drawLossCurve();
+                    setTimeout(animate, 50);
+                } else {
+                    // Reset and restart
+                    setTimeout(() => {
+                        currentEpoch = 0;
+                        animate();
+                    }, 2000);
+                }
+            }
+            
+            // Start animation when visible
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animate();
+                        observer.unobserve(entry.target);
+                    }
                 });
+            }, { threshold: 0.5 });
+            
+            observer.observe(canvas);
+        }
+
+        // Code Reveal Animation
+        function initCodeReveal() {
+            const codeContainer = document.getElementById('codeReveal');
+            
+            const codeLines = [
+                '<span class="code-comment"># Define our neural network model</span>',
+                '<span class="code-keyword">class</span> <span class="code-function">NeuralNetwork</span>(nn.Module):',
+                '    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(<span class="code-keyword">self</span>):',
+                '        <span class="code-keyword">super</span>(NeuralNetwork, <span class="code-keyword">self</span>).__init__()',
+                '        <span class="code-keyword">self</span>.layer1 = nn.Linear(784, 128)',
+                '        <span class="code-keyword">self</span>.layer2 = nn.Linear(128, 64)',
+                '        <span class="code-keyword">self</span>.layer3 = nn.Linear(64, 10)',
+                '        <span class="code-keyword">self</span>.relu = nn.ReLU()',
+                '',
+                '    <span class="code-keyword">def</span> <span class="code-function">forward</span>(<span class="code-keyword">self</span>, x):',
+                '        x = <span class="code-keyword">self</span>.relu(<span class="code-keyword">self</span>.layer1(x))',
+                '        x = <span class="code-keyword">self</span>.relu(<span class="code-keyword">self</span>.layer2(x))',
+                '        x = <span class="code-keyword">self</span>.layer3(x)',
+                '        <span class="code-keyword">return</span> x',
+                '',
+                '<span class="code-comment"># Initialize and train the model</span>',
+                'model = NeuralNetwork()',
+                'optimizer = torch.optim.Adam(model.parameters(), lr=0.001)',
+                'criterion = nn.CrossEntropyLoss()',
+                '',
+                '<span class="code-keyword">for</span> epoch <span class="code-keyword">in</span> range(100):',
+                '    <span class="code-keyword">for</span> inputs, labels <span class="code-keyword">in</span> dataloader:',
+                '        outputs = model(inputs)',
+                '        loss = criterion(outputs, labels)',
+                '        optimizer.zero_grad()',
+                '        loss.backward()',
+                '        optimizer.step()'
+            ];
+            
+            // Add code lines with delay
+            codeLines.forEach((line, index) => {
+                const codeLine = document.createElement('div');
+                codeLine.classList.add('code-line');
+                codeLine.innerHTML = line;
+                codeLine.style.animationDelay = `${index * 0.1}s`;
+                codeContainer.appendChild(codeLine);
+            });
+        }
+
+        // Section Transitions
+        function initSectionTransitions() {
+            const sections = document.querySelectorAll('section');
+            const sectionTransition = document.getElementById('sectionTransition');
+            let lastSection = null;
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && entry.target.id !== lastSection) {
+                        lastSection = entry.target.id;
+                        
+                        // Show transition
+                        sectionTransition.classList.add('active');
+                        
+                        // Hide transition after a short delay
+                        setTimeout(() => {
+                            sectionTransition.classList.remove('active');
+                        }, 800);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            sections.forEach(section => {
+                observer.observe(section);
             });
         }
 
@@ -791,9 +1432,13 @@
 
         // Initialize all functions when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
+            initCustomCursor();
             createParticles();
+            createDataStream();
             createNeuralNetwork();
-            initMouseFollower();
+            initTrainingVisualization();
+            initCodeReveal();
+            initSectionTransitions();
             initNavbarScroll();
             initSmoothScrolling();
             initFormHandling();
