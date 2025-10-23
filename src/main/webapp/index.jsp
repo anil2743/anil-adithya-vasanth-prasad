@@ -1043,6 +1043,7 @@
             });
         }
 
+ feature/login
         // Intersection Observer for animations
         const observerOptions = {
             threshold: 0.1,
@@ -1058,6 +1059,17 @@
                     }
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
+
+        // Navbar scroll effect facing
+        function initNavbarScroll() {
+            const navbar = document.getElementById('navbar');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+ staging
                 }
             });
         }, observerOptions);
